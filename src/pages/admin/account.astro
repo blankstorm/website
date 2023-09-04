@@ -1,0 +1,79 @@
+--- 
+import Admin from "../../layouts/Admin.astro";
+import AccountView from "../../components/Account.astro";
+import { currentUser } from "../../utils";
+
+const user = await currentUser(Astro.cookies);
+let key;
+if(Astro.url.searchParams.has('key') && Astro.url.searchParams.has('value')){
+	if(api.isValid(key, Astro.url.searchParams.get(key))) {
+			account = await api.users.getOne(key, Astro.url.searchParams.get(key));
+		}
+}
+---
+<Admin user={user}>
+	<AccountView account={user} ></AccountView>
+	<br><br><br>
+	<form action="get">
+		<select name="key" value={ key || 'id' }>
+			<option value="id" { key == 'id' && 'selected' }>ID</option>
+			<option value="username" { key == 'username' && 'selected' }>Username</option>
+			<option value="email" { key == 'email' && 'selected' }>Email</option>
+			<option value="token" { key == 'token' && 'selected' }>Token</option>
+		</select>
+		<input name="value" value={ Astro.url.searchParams.get(key) }>
+		<button>Submit</button>
+	</form>
+	{
+		
+		if(account) {
+	}
+		
+		<br>
+		<button id="refresh" onclick="
+		location.reload()
+">Refresh</button>
+		<h3>Account Actions</h3>
+		{ switch(user.oplvl){
+			{ case 3: }
+				<button class="action" action="enable">Enable</button>
+			{ case 2: }
+				<button class="action" action="email">Email</button>
+			{ case 1: }
+				<button class="action" action="disable">Disable</button>
+		{ } }
+		<br>
+		<div id="error" class="error" style="display: none;"></div>
+		<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+		<script>
+
+			$('button.action').click(e => {
+				const action = $(e.target).attr('action')
+				switch(action){
+					case 'enable':
+						Object.assign(body, { action: 'set', key: 'disabled', reason: prompt('Reason?'), value: false });
+						break;
+					case 'logout':
+						body.action = 'logout';
+						break;
+					case 'disable':
+						Object.assign(body, { action: 'set', key: 'disabled', reason: prompt('Reason?'), value: true });
+						break;
+					case 'email':
+						open('/admin/email?to=' + encodeURIComponent("{ `${account.username} <${account.email}>` }"), '_self')
+						return;
+				};
+				fetch(`//api.${location.host.split('.').slice(1).join('.')}/user?id={ account.id }`, {
+					method: 'post',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify(body),
+					
+				}).then(() => location.reload()).catch(err => {
+					$('#error').show().text(err.message);
+				});
+			});
+		
+		</script>
+</Admin>

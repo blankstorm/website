@@ -1,0 +1,41 @@
+---
+import Main from '../layouts/Main.astro';
+import { users } from '../api';
+import { parseBody } from '../utils';
+
+let error;
+
+if (Astro.request.method == 'POST') {
+	try {
+		const body = await parseBody<{ username: string; email: string; password: string }>(Astro.request);
+		const user = await users.create(body.username, body.email, body.password);
+
+		const token = await users.login(user.id);
+		Astro.cookies.set('token', token, { expires: new Date(Date.now() + 3600_000 * 24 * 28) });
+		return Astro.redirect('/');
+	} catch (err: any) {
+		error = err.message || err;
+	}
+}
+---
+
+<Main title="Register" center>
+	<h1>Register</h1>
+	<br /><br /><br />
+	{error && <div class="error">{error}</div>}
+	<style>
+		input {
+			padding: 0.25em;
+			margin: 0.5em;
+		}
+	</style>
+	<form method="post">
+		<input name="email" placeholder="E-Mail" style="width:25%" type="email" autocomplete="email" /><br />
+		<input name="username" placeholder="Username" style="width:25%" autocomplete="name" /><br />
+		<input name="password" placeholder="Password" style="width:25%" type="password" autocomplete="new-password" /><br /><br />
+		<input name="tos" type="checkbox" /><span>I agree to the Blankstorm <a href="/tos">Terms of Service</a></span><br /><br />
+		<button>Register</button>
+	</form>
+	<br />
+	<a href="/login">Login Instead</a>
+</Main>

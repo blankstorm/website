@@ -1,0 +1,17 @@
+---
+import Main from '../layouts/Main.astro';
+import marked from 'marked';
+const url = 'https://raw.githubusercontent.com/dr-vortex/blankstorm/main/license.md';
+let error, parsed;
+try {
+	const response = await fetch(url);
+	const text = await response.text();
+	parsed = marked.parse(text);
+} catch (err) {
+	error = err;
+}
+---
+
+<Main title="Terms of Service" center>
+	{error ? `<br>Failed to get terms of service. See them <a href="${url}" target="_blank">here</a>.` : parsed}
+</Main>

@@ -1,0 +1,65 @@
+{ try { const api = await locals.import('./api.js'), { 'default': sgMail } = await locals.import('@sendgrid/mail');
+const oplvl = 2, user = req.cookies.token && await api.users.getOne('token', req.cookies.token); }
+<!DOCTYPE html>
+<html lang="en">
+{ await include('/blankstorm.drvortex.dev/head.ejs', { title: 'Admin Dashboard' }); }
+<body>
+	{ await include('/blankstorm.drvortex.dev/nav.ejs'); }
+	{ await include('/blankstorm.drvortex.dev/admin-actions.ejs', { oplvl }); }
+	{ if(req.method == 'POST'){
+		try{
+			for(const param of ['from', 'address', 'to', 'subject', 'content']){
+				if(!(param in req.body)){
+					throw `Missing "${param}"`;
+				}
+			}
+
+			const isMultiple = /oplvl\d/.test(req.body.to);
+			let to = req.body.to;
+			if(isMultiple){
+				const users = await api.users.getAllWithMinOplvl(+req.body.to.slice(5, 6));
+				to = users.map(user => ({ to: `${user.username} <${user.email}>`, substitutions: user }));
+			}
+
+			await sgMail.send({
+				isMultiple,
+				from: `${req.body.from} <${req.body.address}>`,
+				[isMultiple ? 'personalizations' : 'to']: to,
+				substitutionWrappers: ['$', ''],
+				substitutions: Object.fromEntries(Object.entries(user).map(([k, v]) => ['sender.' + k, v])),
+				subject: req.body.subject,
+				html: '<p style="font-family:sans-serif">' + req.body.content.replaceAll('\n', '<br>').replaceAll('\t', '&nbsp;'.repeat(4)) + '</p>'
+			});
+			echo('<br><br>Sent email successfully.');
+		} catch(err){
+			echo('<br><br>Failed to send email: ' + err);
+		}
+		
+	} else { } 
+	<h2>Send email</h2>
+	<form method="post">
+		<label for="from">From: </label>
+		<input name="from" value="{ user.username }" size="10">
+		<select name="address" value="{ user.email }">
+			<option value="{ user.email }">{ user.email }</option>
+			<option value="support@drvortex.dev">support@drvortex.dev</option>
+		</select><br><br>
+		<label for="to">To: </label>
+		<select name="to" value="{ req.query.to }">
+			{ if(req.query.to){ }
+				<option value="{ req.query.to }">{ req.query.to }</option>
+			{ } }
+			<option value="oplvl4">Owners</option>
+			<option value="oplvl3">Administrators</option>
+			<option value="oplvl2">Developers</option>
+			<option value="oplvl1">Moderators</option>
+			<option value="oplvl0">Users</option>
+		</select><br><br>
+		<label for="subject">Subject: </label><input name="subject" size="50"><br><br>
+		<textarea name="content" cols="100" rows="10"></textarea><br><br>
+		<button>Send</button>
+	</form>
+	{ } }
+</body>
+</html>
+{ } catch (err){ throw err } }

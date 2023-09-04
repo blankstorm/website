@@ -1,0 +1,87 @@
+nav {
+	background-color: hsl(200, 50%, 50%);
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 50px;
+	line-height: 40px;
+	z-index: 2;
+	font-family: sans-serif;
+	box-shadow: none;
+	list-style: none;
+}
+
+nav > a {
+	padding: 30px;
+}
+
+nav div {
+	background-color: hsl(200, 50%, 25%);
+	width: fit-content;
+	height: fit-content;
+	padding: 10px;
+	text-align: center;
+}
+
+nav div.sub-menu {
+	display: none;
+	border-radius: .33em;
+}
+
+nav a.sub-menu:hover + div.sub-menu,
+div.sub-menu:hover {
+	display: block;
+}
+
+nav #account-link {
+	font-family: sans-serif;
+	position: fixed;
+	right: 1px;
+	padding: 0 30px 30px 30px;
+	top: 0px;
+	line-height: 40px;
+	text-align: right;
+	z-index: 4;
+}
+
+svg.icon {
+	display: inline;
+	width: 1em;
+	height: 1em;
+	fill:hsla(200, 100%, 90%, 0.8);
+}
+
+svg.icon.source {
+	width: 0em;
+	height: 0em;
+}
+
+.clickable:hover {
+	cursor: pointer;
+}
+
+.page-content-center {
+	position: absolute;
+	left: 25%;
+	width: 50%;
+	text-align: center;
+}
+
+.error {
+	display: inline-block;
+	background-color: #a44;
+	border-radius: 1em;
+	width: fit-content;
+	text-align: center;
+	padding: 0.75em;
+	margin: 1em;
+}
+
+a.action {
+	background: hsla(200,50%,25%,1);
+	padding: 10px 20px 10px 20px;
+	margin: 5px 10px 5px 10px;
+	border-radius: 4px;
+	box-shadow: none;
+}

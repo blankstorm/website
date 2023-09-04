@@ -1,0 +1,17 @@
+---
+import Main from '../layouts/Main.astro';
+import * as api from '../api';
+import { currentUser } from '../utils';
+
+const user = await currentUser(Astro.cookies);
+
+if (user) {
+	await api.users.logout(user.id);
+	return Astro.redirect('/');
+}
+---
+
+<Main title="Logout" center user={user}>
+	<br /><br />
+	{user ? 'Successfully signed you out' : 'You must be signed in to do that!'}
+</Main>

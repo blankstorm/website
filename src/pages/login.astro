@@ -1,0 +1,46 @@
+---
+import Main from '../layouts/Main.astro';
+import { users, hash, isValid } from '../api';
+import { parseBody } from '../utils';
+
+let err;
+if (Astro.request.method == 'POST') {
+	try {
+		const body = await parseBody<{ email: string; password: string }>(Astro.request);
+		if (!isValid('email', body.email)) throw 'You must enter a valid email.';
+		if (!isValid('password', body.password)) throw 'You must enter a valid password.';
+
+		const user = await users.getOne('email', body.email);
+
+		if (!user) throw 'A user with that email address does not exist.';
+		if (user.disabled) throw 'That account has been disabled.';
+
+		if (user.password != hash(body.password)) throw 'Incorrect password.';
+
+		const token = await users.login(user.id);
+		Astro.cookies.set('token', token, { expires: new Date(Date.now() + 3600_000 * 24 * 28) });
+		return Astro.redirect('/');
+	} catch (e) {
+		err = e;
+	}
+}
+---
+
+<Main title="login" center>
+	<h1>Login</h1>
+	<br /><br /><br />
+	{err && <div class="error">{err}</div>}
+	<style>
+		input {
+			padding: 0.25em;
+			margin: 0.5em;
+		}
+	</style>
+	<form method="post">
+		<input name="email" placeholder="E-Mail" style="width:25%" type="email" autocomplete="email" /><br />
+		<input name="password" placeholder="Password" style="width:25%" type="password" autocomplete="current-password" /><br /><br />
+		<button>Login</button>
+	</form>
+	<br />
+	<a href="/register">Register Instead</a>
+</Main>

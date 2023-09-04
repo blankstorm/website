@@ -1,0 +1,76 @@
+---
+import Main from '../layouts/Main.astro';
+import marked from 'marked';
+import type { Release, ReleaseAsset } from '../types';
+
+let error,
+	releases: Release[] = [];
+
+const formatNum = Intl.NumberFormat('en', { notation: 'compact' }).format;
+function formatBytes(bytes: number): string {
+	const unit = Math.floor(Math.log10(bytes) / 3);
+	const adjusted = bytes / 10 ** (3 * unit);
+	return adjusted.toFixed(2) + ' ' + ['B', 'KB', 'MB', 'GB', 'TB'][unit];
+}
+try {
+	const response = await fetch('https://api.github.com/repos/dr-vortex/blankstorm/releases');
+	releases = await response.json();
+	releases.sort((a: Release, b: Release) => (Date.parse(a.created_at) < Date.parse(b.created_at) ? 1 : 0));
+} catch (err) {
+	error = err;
+}
+
+function downloadText(asset: ReleaseAsset): string {
+	return `${formatBytes(asset.size)}, ${formatNum(asset.download_count)} download${asset.download_count != 1 ? 's' : ''}`;
+}
+---
+
+<Main title="Changelog">
+	<style>
+		li {
+			padding-top: 0.25em;
+			padding-bottom: 0.25em;
+		}
+	</style>
+</Main>
+
+{
+	error
+		? '<br>Failed to fetch changelog. See it <a href="https://github.com/dr-vortex/blankstorm/releases" target="_blank">here</a>.'
+		: releases.map((release: Release) => (
+				<div>
+					<a id={release.tag_name} />
+					<>
+						<br />
+						<br />
+					</>
+					<h3 class="release-title">
+						<a href={'#' + release.tag_name}>{release.name}</a>
+					</h3>
+					{release.prerelease && <em>This is a pre-release</em>}
+					<p class="release-date">
+						Release date:
+						{new Date(release.created_at).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+					</p>
+					<h4>Details</h4>
+					<div class="release-body" set:html={marked.parse(release.body)}></div>
+					{release.assets.length > 0 && (
+						<div>
+							<h4>Downloads</h4>
+							<p>
+								{release.assets.map((asset: any) => (
+									<span>
+										<a href={asset.browser_download_url} download={asset.name}>
+											{asset.label || asset.name}
+										</a>
+										<span>{downloadText(asset)}</span>
+										<br />
+										<br />
+									</span>
+								))}
+							</p>
+						</div>
+					)}
+				</div>
+		  ))
+}

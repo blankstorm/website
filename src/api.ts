@@ -3,7 +3,8 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { SqlError } from 'mariadb';
 import db from './db';
 import sgMail from '@sendgrid/mail';
-import type { Account, FullAccount, Response, account } from '@blankstorm/api';
+import type { Account, FullAccount, Response } from '@blankstorm/api';
+import { checkValid, isValid, type Type as AccountType } from '@blankstorm/api/dist/account';
 export type * as api from '@blankstorm/api';
 
 export function hash(text: string): string {
@@ -30,7 +31,7 @@ export function parseError(err: Error, res: ResponseInit) {
 
 export function sendMail(to: string, subject: string, contents: string) {
 	return sgMail.send({
-		from: 'Blankstorm <no-reply@drvortex.dev>',
+		from: 'Blankstorm <no-reply@blankstorm.net>',
 		to,
 		subject,
 		html: '<p style="font-family:sans-serif">' + contents.replaceAll('\n', '<br>') + '</p>',
@@ -73,7 +74,7 @@ export const users = {
 		}
 		return results;
 	},
-	async getAllWithMinType(type: account.Type = 4, offset = 0, limit = 1000): Promise<FullAccount[]> {
+	async getAllWithMinType(type: AccountType = 4, offset = 0, limit = 1000): Promise<FullAccount[]> {
 		const results = await db.query('select * from accounts where oplvl >= ? limit ?,?', [type, offset, limit]);
 		for (const result of results) {
 			result.disabled = !!result.disabled;
@@ -81,7 +82,7 @@ export const users = {
 		return results;
 	},
 	async set(id: string, attr: string, value: string, reason?: string): Promise<void> {
-		if (!isValid(attr, value)) {
+		if (!isValid(attr as keyof FullAccount, value)) {
 			throw 'Invalid key or value';
 		}
 

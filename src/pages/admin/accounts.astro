@@ -1,0 +1,51 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import { users } from '../../api';
+import * as api from '@blankstorm/api';
+
+const from = parseInt(Astro.url.searchParams.get('from') || '0');
+const to = parseInt(Astro.url.searchParams.get('to') || '1000');
+const accounts = await users.getAll(from, to - from);
+const numAccounts = await users.count();
+---
+
+<Admin title="View Accounts" minType={2}>
+	<style>
+		td {
+			padding: 0.33em;
+		}
+	</style>
+
+	<br /><br /><br />
+	<p>Current number of accounts: {numAccounts}</p>
+	<table id="accounts">
+		<thead>
+			<tr>
+				<td></td>
+				<td>ID</td>
+				<td>Username</td>
+				<td>Email</td>
+				<td>Admin level</td>
+				<td>Created</td>
+				<td>Username changed</td>
+				<td>Disabled</td>
+				<td>Logged in</td>
+				<td>Action Session</td>
+			</tr>
+		</thead>
+		<tbody>{accounts.map(account => (console.log(account), <tr>
+			<td>
+				<a href={'/admin/account?id=' + account.id}>Manage</a>
+			</td>
+			<td>{account.id}</td>
+			<td>{account.username}</td>
+			<td>{account.email}</td>
+			<td>{api.account.getRole(account.oplvl)}</td>
+			<td>{account.created.toString().slice(4, 15)}</td>
+			<td>{account.lastchange.toString().slice(4, 15)}</td>
+			<td>{account.disabled ? 'Yes' : 'No'}</td>
+			<td>{account.token ? 'Yes' : 'No'}</td>
+			<td>{account.session ? 'Yes' : 'No'}</td>
+		</tr>))}</tbody>
+	</table>
+</Admin>

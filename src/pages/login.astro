@@ -1,14 +1,15 @@
 ---
 import Main from '../layouts/Main.astro';
-import { users, hash, isValid } from '../api';
+import { users, hash } from '../api';
 import { parseBody } from '../utils';
+import { account } from '@blankstorm/api';
 
 let err;
 if (Astro.request.method == 'POST') {
 	try {
 		const body = await parseBody<{ email: string; password: string }>(Astro.request);
-		if (!isValid('email', body.email)) throw 'You must enter a valid email.';
-		if (!isValid('password', body.password)) throw 'You must enter a valid password.';
+		if (!account.isValid('email', body.email)) throw 'You must enter a valid email.';
+		if (!account.isValid('password', body.password)) throw 'You must enter a valid password.';
 
 		const user = await users.getOne('email', body.email);
 

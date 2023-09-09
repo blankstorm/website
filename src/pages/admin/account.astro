@@ -1,79 +1,41 @@
---- 
-import Admin from "../../layouts/Admin.astro";
-import AccountView from "../../components/Account.astro";
-import { currentUser } from "../../utils";
+---
+import Admin from '../../layouts/Admin.astro';
+import AccountView from '../../components/Account.astro';
+import { currentUser } from '../../utils';
+import { users } from '../../api';
+import { type FullAccount, account as apiAccount } from '@blankstorm/api';
+const { isValid } = apiAccount;
 
-const user = await currentUser(Astro.cookies);
-let key;
-if(Astro.url.searchParams.has('key') && Astro.url.searchParams.has('value')){
-	if(api.isValid(key, Astro.url.searchParams.get(key))) {
-			account = await api.users.getOne(key, Astro.url.searchParams.get(key));
-		}
+const current = (await currentUser(Astro.cookies)) as FullAccount;
+if (!current || current?.oplvl < 0) {
+	Astro.redirect('/login');
+}
+let key = Astro.url.searchParams.get('key') as keyof FullAccount,
+	value: string = Astro.url.searchParams.get('value') as string,
+	account: FullAccount = {} as FullAccount;
+for (const k of ['id', 'username', 'email', 'token']) {
+	if (Astro.url.searchParams.has(k)) {
+		key = k as keyof FullAccount;
+		value = Astro.url.searchParams.get(k) as string;
+		break;
+	}
+}
+if (isValid(key, value)) {
+	account = await users.getOne(key, value);
 }
 ---
-<Admin user={user}>
-	<AccountView account={user} ></AccountView>
-	<br><br><br>
-	<form action="get">
-		<select name="key" value={ key || 'id' }>
-			<option value="id" { key == 'id' && 'selected' }>ID</option>
-			<option value="username" { key == 'username' && 'selected' }>Username</option>
-			<option value="email" { key == 'email' && 'selected' }>Email</option>
-			<option value="token" { key == 'token' && 'selected' }>Token</option>
+
+<Admin user={current} title="Manage account">
+	<br /><br /><br />
+	<form method="get">
+		<select name="key" value={key || 'id'}>
+			<option value="id">ID</option>
+			<option value="username">Username</option>
+			<option value="email">Email</option>
+			<option value="token">Token</option>
 		</select>
-		<input name="value" value={ Astro.url.searchParams.get(key) }>
+		<input name="value" value={value} />
 		<button>Submit</button>
 	</form>
-	{
-		
-		if(account) {
-	}
-		
-		<br>
-		<button id="refresh" onclick="
-		location.reload()
-">Refresh</button>
-		<h3>Account Actions</h3>
-		{ switch(user.oplvl){
-			{ case 3: }
-				<button class="action" action="enable">Enable</button>
-			{ case 2: }
-				<button class="action" action="email">Email</button>
-			{ case 1: }
-				<button class="action" action="disable">Disable</button>
-		{ } }
-		<br>
-		<div id="error" class="error" style="display: none;"></div>
-		<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-		<script>
-
-			$('button.action').click(e => {
-				const action = $(e.target).attr('action')
-				switch(action){
-					case 'enable':
-						Object.assign(body, { action: 'set', key: 'disabled', reason: prompt('Reason?'), value: false });
-						break;
-					case 'logout':
-						body.action = 'logout';
-						break;
-					case 'disable':
-						Object.assign(body, { action: 'set', key: 'disabled', reason: prompt('Reason?'), value: true });
-						break;
-					case 'email':
-						open('/admin/email?to=' + encodeURIComponent("{ `${account.username} <${account.email}>` }"), '_self')
-						return;
-				};
-				fetch(`//api.${location.host.split('.').slice(1).join('.')}/user?id={ account.id }`, {
-					method: 'post',
-					headers: {
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify(body),
-					
-				}).then(() => location.reload()).catch(err => {
-					$('#error').show().text(err.message);
-				});
-			});
-		
-		</script>
+	<AccountView account={account} viewer={current} />
 </Admin>

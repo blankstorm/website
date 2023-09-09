@@ -6,9 +6,10 @@ import type { FullAccount, account } from '@blankstorm/api';
 interface Props {
 	user?: FullAccount;
 	minType?: account.Type;
+	title?: string;
 }
 
-let { user = await currentUser(Astro.cookies), minType } = Astro.props;
+let { user = await currentUser(Astro.cookies), minType, title = 'Admin' } = Astro.props;
 minType ||= 1; // to prevent 0 from being passed
 
 if (!user) {
@@ -20,7 +21,7 @@ if (user.oplvl < minType) {
 }
 ---
 
-<Main title="Admin" user={user}>
+<Main title={title} user={user}>
 	<slot />
 	{
 		user.oplvl < minType ? (

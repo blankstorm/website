@@ -12,7 +12,7 @@
 		"url": "https://github.com/blankstorm/website/issues"
 	},
 	"dependencies": {
-		"@blankstorm/api": "^0.0.8",
+		"@blankstorm/api": "^0.0.19",
 		"@sendgrid/mail": "^7.7.0",
 		"astro": "^2.10.7",
 		"jquery": "^3.7.1",

@@ -12,83 +12,6 @@ export function hash(text: string): string {
 	return _hash.digest('hex');
 }
 
-/**
- * Returns if an attribute is valid
- */
-export function isValid(attr: string, val: string): boolean {
-	switch (attr) {
-		case 'id':
-			return /^[0-9a-f]{32}$/.test(val);
-		case 'username':
-			return /^[_0-9a-zA-Z]{3,20}$/.test(val);
-		case 'email':
-			return /^[a-zA-Z0-9.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9]{2,5}){1,2}$/.test(val);
-		case 'password':
-			try {
-				hash(val);
-				return true;
-			} catch (e) {
-				return false;
-			}
-		case 'lastchange':
-		case 'created':
-			try {
-				return Date.parse(val) < Date.now();
-			} catch (e) {
-				return false;
-			}
-		case 'token':
-		case 'session':
-			return /[0-9a-f]{64}/.test(val);
-		case 'disabled':
-			return [true, false, 1, 0, 'true', 'false'].some(v => v === val);
-		default:
-			return false;
-	}
-}
-
-/**
- * Checks if an attribute in valid (throws when it is not)
- */
-export function checkValid(attr: string, val: string): void {
-	switch (attr) {
-		case 'id':
-			if (val.length != 32) throw new Error('Invalid ID length');
-			if (!/^[0-9a-f]+$/.test(val)) throw new Error('Invalid ID');
-			break;
-		case 'username':
-			if (val.length < 3 || val.length > 20) throw new Error('Invalid username. Usernames must be between 3 and 20 characters.');
-			if (!/^[_0-9a-zA-Z]+$/.test(val)) throw new Error('Invalid username. Usernames can only contain letters, numbers, and underscores');
-			break;
-		case 'email':
-			if (!/^[\w.-]+@[\w-]+(\.\w{2,5}){1,2}$/.test(val)) throw new Error('Invalid email');
-			break;
-		case 'password':
-			try {
-				hash(val);
-			} catch (e) {
-				throw new Error('Password could not be hashed');
-			}
-			break;
-		case 'lastchange':
-		case 'created':
-			if (Date.parse(val) > Date.now()) {
-				throw new Error('Date is in the future');
-			}
-			break;
-		case 'token':
-		case 'session':
-			if (val.length != 64) throw new Error('Invalid token or session');
-			if (!/^[0-9a-f]+$/.test(val)) throw new Error('Invalid token or session');
-			break;
-		case 'disabled':
-			if (![true, false, 1, 0, 'true', 'false'].some(v => v === val)) throw new Error('Invalid disabled value');
-			break;
-		default:
-			throw new TypeError(`"${attr}" is not a user attribute`);
-	}
-}
-
 export function response<R extends string | object>(status: StatusCodes = StatusCodes.OK, result: R, error = false): Response<R> {
 	const statusText: ReasonPhrases = ReasonPhrases[StatusCodes[status] as keyof typeof ReasonPhrases];
 	return { status, statusText, result, error };
@@ -103,23 +26,6 @@ export function error(status = StatusCodes.INTERNAL_SERVER_ERROR, message = '', 
 
 export function parseError(err: Error, res: ResponseInit) {
 	return error(err instanceof SqlError ? StatusCodes.INTERNAL_SERVER_ERROR : StatusCodes.BAD_REQUEST, err.message, res);
-}
-
-export function getAccountRole(type: account.Type, short?: boolean): string {
-	switch (type) {
-		case 0:
-			return 'User';
-		case 1:
-			return short ? 'Mod' : 'Moderator';
-		case 2:
-			return short ? 'Dev' : 'Developer';
-		case 3:
-			return short ? 'Admin' : 'Administrator';
-		case 4:
-			return 'Owner';
-		default:
-			return 'Unknown' + short ? '' : `(${type})`;
-	}
 }
 
 export function sendMail(to: string, subject: string, contents: string) {

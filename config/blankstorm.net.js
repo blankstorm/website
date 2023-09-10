@@ -5,7 +5,7 @@ export default defineConfig({
 	...shared,
 	site: 'https://blankstorm.net',
 	srcDir: 'src/blankstorm.net',
-	//outDir: 'dist/blankstorm.net',
+	outDir: 'dist/blankstorm.net',
 	redirects: {
 		'/yt': 'https://www.youtube.com/channel/UCN-3Jifrsg2GwDN8vxTlWrQ',
 		'/discord': 'https://discord.com/invite/ZyTsVR4NCV',

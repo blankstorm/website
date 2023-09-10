@@ -3,9 +3,7 @@ import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 import { SqlError } from 'mariadb';
 import db from './db';
 import sgMail from '@sendgrid/mail';
-import type { Account, FullAccount, Response } from '@blankstorm/api';
-import { checkValid, isValid, type Type as AccountType } from '@blankstorm/api/dist/account';
-export type * as api from '@blankstorm/api';
+import { type Account, type FullAccount, type Response, account } from '@blankstorm/api';
 
 export function hash(text: string): string {
 	const _hash = createHash('sha256');
@@ -74,7 +72,7 @@ export const users = {
 		}
 		return results;
 	},
-	async getAllWithMinType(type: AccountType = 4, offset = 0, limit = 1000): Promise<FullAccount[]> {
+	async getAllWithMinType(type: account.Type = 4, offset = 0, limit = 1000): Promise<FullAccount[]> {
 		const results = await db.query('select * from accounts where oplvl >= ? limit ?,?', [type, offset, limit]);
 		for (const result of results) {
 			result.disabled = !!result.disabled;
@@ -82,7 +80,7 @@ export const users = {
 		return results;
 	},
 	async set(id: string, attr: string, value: string, reason?: string): Promise<void> {
-		if (!isValid(attr as keyof FullAccount, value)) {
+		if (!account.isValid(attr as keyof FullAccount, value)) {
 			throw 'Invalid key or value';
 		}
 
@@ -114,9 +112,9 @@ export const users = {
 		return await db.query(`update accounts set ${attr}=? where id=?`, [value, id]);
 	},
 	async create(username: string, email: string, rawPassword: string) {
-		checkValid('username', username);
-		checkValid('email', email);
-		checkValid('password', rawPassword);
+		account.checkValid('username', username);
+		account.checkValid('email', email);
+		account.checkValid('password', rawPassword);
 
 		if ((await this.get('username', username)).length) {
 			throw new ReferenceError('User with username already exists');

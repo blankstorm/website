@@ -6,7 +6,7 @@ export async function currentUser(cookies: AstroCookies): Promise<FullAccount | 
 	if(!cookies.has('token')) {
 		return;
 	}
-	return await users.getOne('token', cookies.get('token').value || '');
+	return await users.getOne('token', cookies.get('token')?.value || '');
 }
 
 export async function parseBody<V extends Record<string, FormDataEntryValue>>(request: Request): Promise<V> {

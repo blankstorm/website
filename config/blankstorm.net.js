@@ -1,9 +1,11 @@
 import { defineConfig } from 'astro/config';
+import shared from './astro.config';
 
-// https://astro.build/config
 export default defineConfig({
+	...shared,
 	site: 'https://blankstorm.net',
-	output: 'server',
+	srcDir: 'src/blankstorm.net',
+	//outDir: 'dist/blankstorm.net',
 	redirects: {
 		'/yt': 'https://www.youtube.com/channel/UCN-3Jifrsg2GwDN8vxTlWrQ',
 		'/discord': 'https://discord.com/invite/ZyTsVR4NCV',

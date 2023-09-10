@@ -3,7 +3,9 @@
 	"private": true,
 	"type": "module",
 	"version": "0.0.1",
-	"scripts": {},
+	"scripts": {
+		"build": "astro build --config config/blankstorm.net.js && astro build --config config/api.blankstorm.net.js"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/blankstorm/website.git"
@@ -12,9 +14,13 @@
 		"url": "https://github.com/blankstorm/website/issues"
 	},
 	"dependencies": {
-		"@blankstorm/api": "^0.0.19",
+		"@astrojs/node": "^6.0.0",
+		"@blankstorm/api": "^0.0.20",
 		"@sendgrid/mail": "^7.7.0",
-		"astro": "^2.10.7",
+		"@types/express": "^4.17.17",
+		"astro": "^3.0.12",
+		"compression": "^1.7.4",
+		"express": "^4.18.2",
 		"jquery": "^3.7.1",
 		"mariadb": "^3.2.0",
 		"marked": "^8.0.0"

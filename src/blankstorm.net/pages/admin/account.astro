@@ -1,8 +1,8 @@
 ---
 import Admin from '../../layouts/Admin.astro';
 import AccountView from '../../components/Account.astro';
-import { currentUser } from '../../utils';
-import { users } from '../../api';
+import { currentUser } from '../../../utils';
+import { users } from '../../../api';
 import { type FullAccount, account as apiAccount } from '@blankstorm/api';
 const { isValid } = apiAccount;
 

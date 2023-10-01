@@ -1,30 +1,12 @@
 import { randomBytes, createHash } from 'crypto';
-import { ReasonPhrases, StatusCodes } from 'http-status-codes';
-import { SqlError } from 'mariadb';
 import db from './db';
 import sgMail from '@sendgrid/mail';
-import { type Account, type FullAccount, type Response, account } from '@blankstorm/api';
+import { type FullAccount, account, type Account } from '@blankstorm/api';
 
 export function hash(text: string): string {
 	const _hash = createHash('sha256');
 	_hash.update(text);
 	return _hash.digest('hex');
-}
-
-export function response<R extends string | object>(status: StatusCodes = StatusCodes.OK, result: R, error = false): Response<R> {
-	const statusText: ReasonPhrases = ReasonPhrases[StatusCodes[status] as keyof typeof ReasonPhrases];
-	return { status, statusText, result, error };
-}
-
-export function error(status = StatusCodes.INTERNAL_SERVER_ERROR, message = '', res?: ResponseInit) {
-	if (res) {
-		res.status = status;
-	}
-	return response(status, message, true);
-}
-
-export function parseError(err: Error, res: ResponseInit) {
-	return error(err instanceof SqlError ? StatusCodes.INTERNAL_SERVER_ERROR : StatusCodes.BAD_REQUEST, err.message, res);
 }
 
 export function sendMail(to: string, subject: string, contents: string) {
@@ -36,8 +18,8 @@ export function sendMail(to: string, subject: string, contents: string) {
 	});
 }
 
-export function sendMailToUser({ username, email }: { username: string, email?: string }, subject: string, contents: string) {
-	if(!email) {
+export function sendMailToUser({ username, email }: { username: string; email?: string }, subject: string, contents: string) {
+	if (!email) {
 		throw 'Missing email';
 	}
 	return sendMail(`${username} <${email}>`, subject, `${username},\n\n${contents}\n\nBest,\nThe Blankstorm dev team`);
@@ -85,7 +67,7 @@ export const users = {
 		}
 
 		const user = await this.getOne('id', id);
-		if(!user){
+		if (!user) {
 			return;
 		}
 		switch (attr) {
@@ -111,7 +93,7 @@ export const users = {
 
 		return await db.query(`update accounts set ${attr}=? where id=?`, [value, id]);
 	},
-	async create(username: string, email: string, rawPassword: string) {
+	async create(username: string, email: string, rawPassword: string): Promise<Account> {
 		account.checkValid('username', username);
 		account.checkValid('email', email);
 		account.checkValid('password', rawPassword);
@@ -146,17 +128,16 @@ export const users = {
 			disabled: false,
 			username,
 			email,
-			password,
 			oplvl: 0,
 			created: date,
 			lastchange: date,
 		};
 	},
-	async has(id: string) {
+	async has(id: string): Promise<boolean> {
 		const result = await db.query('select count(1) as num from accounts where id=?', [id]);
 		return !!result[0].num;
 	},
-	async delete(id: string, reason?: string) {
+	async delete(id: string, reason?: string): Promise<FullAccount> {
 		if (!this.has(id)) {
 			throw new ReferenceError('User does not exist');
 		}
@@ -172,28 +153,17 @@ export const users = {
 
 		return await db.query('delete from accounts where id=?', [id]);
 	},
-	async login(id: string) {
+	async login(id: string): Promise<string> {
 		const token = randomBytes(32).toString('hex');
 		await db.query('update accounts set token=? where id=?', [token, id]);
 		return token;
 	},
-	logout(id: string) {
+	logout(id: string, reason?: string): Promise<boolean> {
 		return db.query('update accounts set token="" where id=?', [id]);
 	},
-	async generateSession(id: string) {
+	async generateSession(id: string): Promise<string> {
 		const session = randomBytes(32).toString('hex');
 		await db.query('update accounts set session=? where id=?', [session, id]);
 		return session;
-	},
-
-	reduce(user: Account): Account {
-		return {
-			id: user?.id,
-			username: user?.username,
-			oplvl: user?.oplvl,
-			lastchange: user?.lastchange,
-			created: user?.created,
-			disabled: user?.disabled,
-		};
 	},
 };

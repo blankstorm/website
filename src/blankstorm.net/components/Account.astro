@@ -147,7 +147,6 @@ const id = Math.random().toString(36).slice(2);
 		}
 
 		const authToken = getCookie('token');
-		api.setURL('//api.' + location.host);
 		api.auth(authToken);
 
 		const deleteButton = document.querySelector('#delete'),

@@ -4,7 +4,7 @@
 	"type": "module",
 	"version": "0.0.1",
 	"scripts": {
-		"build": "astro build --config config/blankstorm.net.js && astro build --config config/api.blankstorm.net.js"
+		"build": "astro build"
 	},
 	"repository": {
 		"type": "git",

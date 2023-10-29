@@ -149,54 +149,54 @@ const id = Math.random().toString(36).slice(2);
 		const authToken = getCookie('token');
 		api.auth(authToken);
 
-		const deleteButton = document.querySelector('#delete'),
-		deleteDialog = document.querySelector('#delete-dialog');
+		const deleteButton = document.querySelector<HTMLButtonElement>('#delete'),
+		deleteDialog = document.querySelector<HTMLDialogElement>('#delete-dialog');
 		if(deleteButton) {
 			deleteButton.onclick = deleteDialog.showModal;
 		}
 
-		document.querySelector('#delete-dialog .no').onclick = () => {
+		document.querySelector<HTMLButtonElement>('#delete-dialog .no').onclick = () => {
 			deleteDialog.close();
 		};
 
-		document.querySelector('#delete-dialog .yes').onclick = () => {
+		document.querySelector<HTMLButtonElement>('#delete-dialog .yes').onclick = () => {
 			api.account.delete(account.id, 'User deleted account')
 			.then(() => location.href = '/')
 			.catch(handleError);
 		};
 
-		const logoutButton = document.querySelector('#logout'), logoutDialog = document.querySelector('#logout-dialog');
+		const logoutButton = document.querySelector<HTMLButtonElement>('#logout'), logoutDialog = document.querySelector<HTMLDialogElement>('#logout-dialog');
 		if(logoutButton) {
 			logoutButton.onclick = logoutDialog.showModal;
 		}
 		
 
-		document.querySelector('#logout-dialog .no').onclick = () => {
+		document.querySelector<HTMLButtonElement>('#logout-dialog .no').onclick = () => {
 			logoutDialog.close();
 		};
 
-		document.querySelector('#logout-dialog .yes').onclick = () => {
+		document.querySelector<HTMLButtonElement>('#logout-dialog .yes').onclick = () => {
 			api.account.logout(account.id)
 			.then(() => location.href = '/')
 			.catch(handleError);
 		};
 
-		const change = document.querySelector('#change')
+		const change = document.querySelector<HTMLElement>('#change')
 		if(change){
 			change.onclick = e => {
 				const key = searchParams.get('edit');
 				if(key == 'password') {
-					const newPassword = document.querySelector('input[name=new_password]').value;
-					if(newPassword != document.querySelector('input[name=confirm_password]').value) {
+					const newPassword = document.querySelector<HTMLInputElement>('input[name=new_password]').value;
+					if(newPassword != document.querySelector<HTMLInputElement>('input[name=confirm_password]').value) {
 						return;
 					}
 
-					api.request('POST', 'account', { action: 'set', key: 'password', value: newPassword, oldPassword: document.querySelector('input[name=current_password]').value })
+					api.request('POST', 'account', { action: 'set', key: 'password', value: newPassword, oldPassword: document.querySelector<HTMLInputElement>('input[name=current_password]').value })
 					.then(() => location.reload())
 					.catch(handleError);
 					return;
 				}
-				const value = document.querySelector(`input[name=${key}]`).value;
+				const value = document.querySelector<HTMLInputElement>(`input[name=${key}]`).value;
 				api.request('POST', 'account', { action: 'set', key, value })
 				.then(() => location.reload())
 				.catch(handleError);

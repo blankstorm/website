@@ -1,9 +1,9 @@
 ---
 import Admin from '../../layouts/Admin.astro';
 import sgMail from '@sendgrid/mail';
-import { users } from '../../../api';
+import { users } from '../../api';
 import { type Account, account } from '@blankstorm/api';
-import { currentUser } from '../../../utils';
+import { currentUser } from '../../utils';
 const roles = account.roles.map(role => role.toLowerCase());
 const sender = await currentUser(Astro.cookies);
 

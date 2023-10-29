@@ -1,10 +1,10 @@
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
+import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
 	output: 'server',
-	adapter: node({
-		mode: 'middleware',
+	adapter: cloudflare({
+		mode: 'server',
 	}),
 	site: 'https://blankstorm.net',
 	redirects: {

@@ -1,6 +1,6 @@
 ---
 import Main from '../layouts/Main.astro';
-import * as api from '../../api';
+import * as api from '../api';
 import { currentUser } from '../utils';
 
 const user = await currentUser(Astro.cookies);

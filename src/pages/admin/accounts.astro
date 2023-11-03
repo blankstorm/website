@@ -1,12 +1,14 @@
 ---
 import Admin from '../../layouts/Admin.astro';
-import { users } from '../../api';
-import * as api from '@blankstorm/api';
+import { getAllAccounts, getAccountNum } from '../../api';
+import { getAccountRole } from '@blankstorm/api';
+
+const db = Astro.locals.runtime.env.DB;
 
 const from = parseInt(Astro.url.searchParams.get('from') || '0');
 const to = parseInt(Astro.url.searchParams.get('to') || '1000');
-const accounts = await users.getAll(from, to - from);
-const numAccounts = await users.count();
+const accounts = await getAllAccounts(from, to - from);
+const numAccounts = await getAccountNum();
 ---
 
 <Admin title="View Accounts" minType={2}>
@@ -40,7 +42,7 @@ const numAccounts = await users.count();
 			<td>{account.id}</td>
 			<td>{account.username}</td>
 			<td>{account.email}</td>
-			<td>{api.account.getRole(account.oplvl)}</td>
+			<td>{getAccountRole(account.oplvl)}</td>
 			<td>{account.created.toString().slice(4, 15)}</td>
 			<td>{account.lastchange.toString().slice(4, 15)}</td>
 			<td>{account.disabled ? 'Yes' : 'No'}</td>

@@ -1,24 +1,24 @@
 ---
 import Main from '../layouts/Main.astro';
-import { users, hash } from '../api';
+import { getAccount, login, hash } from '../api';
 import { parseBody } from '../utils';
-import { account } from '@blankstorm/api';
+import { isValidAccountAttribute } from '@blankstorm/api';
 
 let err;
 if (Astro.request.method == 'POST') {
 	try {
 		const body = await parseBody<{ email: string; password: string }>(Astro.request);
-		if (!account.isValid('email', body.email)) throw 'You must enter a valid email.';
-		if (!account.isValid('password', body.password)) throw 'You must enter a valid password.';
+		if (!isValidAccountAttribute('email', body.email)) throw 'You must enter a valid email.';
+		if (!isValidAccountAttribute('password', body.password)) throw 'You must enter a valid password.';
 
-		const user = await users.getOne('email', body.email);
+		const user = await getAccount('email', body.email);
 
 		if (!user) throw 'A user with that email address does not exist.';
 		if (user.disabled) throw 'That account has been disabled.';
 
 		if (user.password != hash(body.password)) throw 'Incorrect password.';
 
-		const token = await users.login(user.id);
+		const token = await login(user.id);
 		Astro.cookies.set('token', token, { expires: new Date(Date.now() + 3600_000 * 24 * 28) });
 		return Astro.redirect('/');
 	} catch (e) {

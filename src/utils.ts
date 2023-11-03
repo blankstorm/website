@@ -1,12 +1,12 @@
 import type { AstroCookies } from 'astro';
-import { users } from './api';
+import { getAccount } from './api';
 import type { FullAccount } from '@blankstorm/api';
 
 export async function currentUser(cookies: AstroCookies): Promise<FullAccount | undefined> {
 	if(!cookies.has('token')) {
 		return;
 	}
-	return await users.getOne('token', cookies.get('token')?.value || '');
+	return await getAccount('token', cookies.get('token')?.value || '');
 }
 
 export async function parseBody<V extends Record<string, FormDataEntryValue>>(request: Request): Promise<V> {

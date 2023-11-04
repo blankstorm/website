@@ -1,6 +1,7 @@
 import { randomBytes, createHash } from 'crypto';
 import sgMail from '@sendgrid/mail';
 import { type FullAccount, isValidAccountAttribute, checkAccountAttribute, type Account, AccountType } from '@blankstorm/api';
+import db from './db';
 
 export function hash(text: string): string {
 	const _hash = createHash('sha256');
@@ -133,7 +134,7 @@ export async function accountExists(id: string): Promise<boolean> {
 	return !!result[0].num;
 }
 export async function deleteAccount(id: string, reason?: string): Promise<FullAccount> {
-	if (!has(id)) {
+	if (!accountExists(id)) {
 		throw new ReferenceError('User does not exist');
 	}
 

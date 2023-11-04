@@ -16,15 +16,15 @@
 		"url": "https://github.com/blankstorm/website/issues"
 	},
 	"dependencies": {
-		"@astrojs/cloudflare": "^7.6.3",
 		"@blankstorm/api": "^0.1.0",
 		"@sendgrid/mail": "^7.7.0",
 		"astro": "^3.0.12",
 		"jquery": "^3.7.1",
+		"mariadb": "^3.2.2",
 		"marked": "^8.0.0"
 	},
 	"devDependencies": {
-		"@cloudflare/workers-types": "^4.20231025.0",
+		"@astrojs/node": "^6.0.3",
 		"@typescript-eslint/eslint-plugin": "^6.4.0",
 		"@typescript-eslint/parser": "^6.4.0",
 		"eslint": "^8.47.0",

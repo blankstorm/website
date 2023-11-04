@@ -1,10 +1,10 @@
 ---
-import { getAccountRole, stripAccountInfo, type FullAccount } from '@blankstorm/api';
+import { getAccountRole, stripAccountInfo, type Account } from '@blankstorm/api';
 
 interface Props {
-	account?: FullAccount;
+	account?: Account;
 	editable?: boolean;
-	viewer?: FullAccount;
+	viewer?: Account;
 }
 
 const { account, editable, viewer } = Astro.props;

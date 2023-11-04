@@ -1,10 +1,10 @@
 ---
 import Main from './Main.astro';
 import { currentUser } from '../utils';
-import type { FullAccount, AccountType } from '@blankstorm/api';
+import type { Account, AccountType } from '@blankstorm/api';
 
 interface Props {
-	user?: FullAccount;
+	user?: Account;
 	minType?: AccountType;
 	title?: string;
 }
@@ -21,7 +21,7 @@ if (user.oplvl < minType) {
 }
 ---
 
-<Main title={title} user={user}>
+<Main title={title} account={user}>
 	<slot />
 	{
 		user.oplvl < minType ? (

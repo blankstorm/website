@@ -6,6 +6,6 @@ import { currentUser } from '../utils';
 const user = await currentUser(Astro.cookies);
 ---
 
-<Main title="Account" center user={user}>
+<Main title="Account" center account={user}>
 	<AccountView account={user} editable></AccountView>
 </Main>

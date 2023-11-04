@@ -1,16 +1,16 @@
 --- 
-import type { FullAccount } from '@blankstorm/api';
+import type { Account } from '@blankstorm/api';
 import '../styles/styles.css';
 import '../styles/website.css';
 import { currentUser } from '../utils';
 
 interface Props {
 	title: string;
-	user?: FullAccount;
+	account?: Account;
 	center?: boolean;
 }
 
-const { title, center, user = await currentUser(Astro.cookies) } = Astro.props;
+const { title, center, account: user = await currentUser(Astro.cookies) } = Astro.props;
 ---
 
 <!DOCTYPE html>

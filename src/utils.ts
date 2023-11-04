@@ -3,14 +3,14 @@ import { getAccount } from './api';
 import type { FullAccount } from '@blankstorm/api';
 
 export async function currentUser(cookies: AstroCookies): Promise<FullAccount | undefined> {
-	if(!cookies.has('token')) {
+	if (!cookies.has('token')) {
 		return;
 	}
 	return await getAccount('token', cookies.get('token')?.value || '');
 }
 
 export async function parseBody<V extends Record<string, FormDataEntryValue>>(request: Request): Promise<V> {
-	switch(request.headers.get('Content-Type')) {
+	switch (request.headers.get('Content-Type')) {
 		case 'application/json':
 			return request.json();
 		case 'application/x-www-form-urlencoded':

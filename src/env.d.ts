@@ -2,8 +2,8 @@
 
 interface ImportMetaEnv {
 	readonly db: {
-		name: string,
-		user: string,
-		password: string
+		name: string;
+		user: string;
+		password: string;
 	};
-  }
+}

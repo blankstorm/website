@@ -1,4 +1,3 @@
-
 /**
  * Exposes the database to the backend
  */

@@ -1,6 +1,6 @@
 ---
 import Main from '../layouts/Main.astro';
-import { createAccount, login } from '../api';
+import { createAccount, login } from '@blankstorm/api';
 import { parseBody } from '../utils';
 
 let error;
@@ -10,7 +10,7 @@ if (Astro.request.method == 'POST') {
 		const body = await parseBody<{ username: string; email: string; password: string }>(Astro.request);
 		const user = await createAccount(body.username, body.email, body.password);
 
-		const token = await login(user.id);
+		const { token } = await login(body.username, body.password);
 		Astro.cookies.set('token', token, { expires: new Date(Date.now() + 3600_000 * 24 * 28) });
 		return Astro.redirect('/');
 	} catch (err: any) {

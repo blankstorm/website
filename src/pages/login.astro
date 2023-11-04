@@ -1,8 +1,7 @@
 ---
 import Main from '../layouts/Main.astro';
-import { getAccount, login, hash } from '../api';
 import { parseBody } from '../utils';
-import { isValidAccountAttribute } from '@blankstorm/api';
+import { isValidAccountAttribute, getAccount, login } from '@blankstorm/api';
 
 let err;
 if (Astro.request.method == 'POST') {
@@ -16,9 +15,7 @@ if (Astro.request.method == 'POST') {
 		if (!user) throw 'A user with that email address does not exist.';
 		if (user.disabled) throw 'That account has been disabled.';
 
-		if (user.password != hash(body.password)) throw 'Incorrect password.';
-
-		const token = await login(user.id);
+		const token = await login(body.email, body.password);
 		Astro.cookies.set('token', token, { expires: new Date(Date.now() + 3600_000 * 24 * 28) });
 		return Astro.redirect('/');
 	} catch (e) {

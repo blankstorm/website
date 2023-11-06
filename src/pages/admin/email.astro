@@ -1,8 +1,7 @@
 ---
 import Admin from '../../layouts/Admin.astro';
 import sgMail from '@sendgrid/mail';
-import { getAllAccountsWithMinType } from '../../api';
-import { type Account, accountRoles } from '@blankstorm/api';
+import { type Account, accountRoles, getAllAccountsWithMinRole } from '@blankstorm/api';
 import { currentUser } from '../../utils';
 const roles = accountRoles.map(role => role.toLowerCase());
 const sender = await currentUser(Astro.cookies);
@@ -23,7 +22,7 @@ if(Astro.request.method == 'POST'){
 		const isMultiple = roles.includes(body.to);
 		let to: string | { to: string; substitutions: Account; }[] = body.to, accounts;
 		if(isMultiple){
-			accounts = await getAllAccountsWithMinType(roles.indexOf(body.to));
+			accounts = await getAllAccountsWithMinRole(roles.indexOf(body.to));
 			to = accounts.map((account: Account) => ({ to: `${account.username} <${account.email}>`, substitutions: account }));
 		}
 		await sgMail.send({

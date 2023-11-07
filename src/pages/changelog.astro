@@ -36,7 +36,7 @@ function downloadText(asset: ReleaseAsset): string {
 
 {
 	error
-		? '<br>Failed to fetch changelog. See it <a href="https://github.com/dr-vortex/blankstorm/releases" target="_blank">here</a>.'
+		? '<br/>Failed to fetch changelog. See it <a href="https://github.com/dr-vortex/blankstorm/releases" target="_blank">here</a>.'
 		: releases.map((release: Release) => (
 				<div>
 					<a id={release.tag_name} />

@@ -1,6 +1,6 @@
 ---
 import Main from '../layouts/Main.astro';
-import marked from 'marked';
+import { parse as parseMarkdown } from 'marked';
 import type { Release, ReleaseAsset } from '../types';
 
 let error,
@@ -53,7 +53,7 @@ function downloadText(asset: ReleaseAsset): string {
 						{new Date(release.created_at).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
 					</p>
 					<h4>Details</h4>
-					<div class="release-body" set:html={marked.parse(release.body)}></div>
+					<div class="release-body" set:html={parseMarkdown(release.body)} />
 					{release.assets.length > 0 && (
 						<div>
 							<h4>Downloads</h4>

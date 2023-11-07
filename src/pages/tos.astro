@@ -1,12 +1,12 @@
 ---
 import Main from '../layouts/Main.astro';
-import marked from 'marked';
+import { parse as parseMarkdown } from 'marked';
 const url = 'https://raw.githubusercontent.com/dr-vortex/blankstorm/main/license.md';
 let error, parsed;
 try {
 	const response = await fetch(url);
 	const text = await response.text();
-	parsed = marked.parse(text);
+	parsed = parseMarkdown(text);
 } catch (err) {
 	error = err;
 }

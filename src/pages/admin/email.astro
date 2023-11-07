@@ -1,47 +1,17 @@
 ---
 import Admin from '../../layouts/Admin.astro';
-import sgMail from '@sendgrid/mail';
-import { type Account, accountRoles, getAllAccountsWithMinRole } from '@blankstorm/api';
 import { currentUser } from '../../utils';
-const roles = accountRoles.map(role => role.toLowerCase());
 const sender = await currentUser(Astro.cookies);
 
 if(!sender) {
 	return Astro.redirect('/login');
 }
-
-let message;
-if(Astro.request.method == 'POST'){
-	try{
-		const body = Object.fromEntries<string>([...await Astro.request.formData()] as [string, string][]);
-		for(const param of ['from', 'address', 'to', 'subject', 'content']){
-			if(!(param in body)){
-				throw 'Missing: ' + param;
-			}
-		}
-		const isMultiple = roles.includes(body.to);
-		let to: string | { to: string; substitutions: Account; }[] = body.to, accounts;
-		if(isMultiple){
-			accounts = await getAllAccountsWithMinRole(roles.indexOf(body.to));
-			to = accounts.map((account: Account) => ({ to: `${account.username} <${account.email}>`, substitutions: account }));
-		}
-		await sgMail.send({
-			isMultiple,
-			from: `${body.from} <${body.address}>`,
-			[isMultiple ? 'personalizations' : 'to']: to,
-			substitutionWrappers: ['$', ''],
-			substitutions: Object.fromEntries(Object.entries(sender).map(([k, v]) => ['sender.' + k, v])),
-			subject: body.subject,
-			html: '<p style="font-family:sans-serif">' + body.content.replaceAll('\n', '<br>').replaceAll('\t', '&nbsp;'.repeat(4)) + '</p>'
-		});
-		message = 'Sent email successfully.';
-	} catch(err){
-		message = 'Failed to send email: ' + err;
-	}
-}
 ---
-<Admin title="Send email" minType={2} user={sender}>
+<Admin title="Send email" minType={2} account={sender}>
 	<h2>Send email</h2>
+	<div class="error">
+		<p>Emails can't be sent currently.</p>
+	</div>
 	<form method="post">
 		<label for="from">From: </label>
 		<input name="from" value={sender.username} size="10">

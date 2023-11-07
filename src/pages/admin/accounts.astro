@@ -4,7 +4,7 @@ import { getAllAccounts, getAccountNum, getAccountRole } from '@blankstorm/api';
 
 const from = parseInt(Astro.url.searchParams.get('from') || '0');
 const to = parseInt(Astro.url.searchParams.get('to') || '1000');
-const accounts = await getAllAccounts(from, to - from);
+const accounts = await getAllAccounts();
 const numAccounts = await getAccountNum();
 ---
 

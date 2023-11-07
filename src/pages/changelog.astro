@@ -63,7 +63,7 @@ function downloadText(asset: ReleaseAsset): string {
 										<a href={asset.browser_download_url} download={asset.name}>
 											{asset.label || asset.name}
 										</a>
-										<span>{downloadText(asset)}</span>
+										<span>&nbsp;{downloadText(asset)}</span>
 										<br />
 										<br />
 									</span>

@@ -4,7 +4,7 @@ import cloudflare from '@astrojs/node';
 export default defineConfig({
 	output: 'server',
 	adapter: cloudflare({
-		mode: 'advanced'
+		mode: 'directory'
 	}),
 	site: 'https://blankstorm.net',
 	redirects: {

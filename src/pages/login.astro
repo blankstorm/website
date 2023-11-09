@@ -8,7 +8,6 @@ if (Astro.request.method == 'POST') {
 	try {
 		const body = await parseBody<{ email: string; password: string }>(Astro.request);
 		if (!isValidAccountAttribute('email', body.email)) throw 'You must enter a valid email.';
-		if (!isValidAccountAttribute('password', body.password)) throw 'You must enter a valid password.';
 
 		const { token } = await login(body.email, body.password);
 		Astro.cookies.set('token', token, { expires: new Date(Date.now() + 3600_000 * 24 * 28) });

@@ -59,7 +59,7 @@ const id = Math.random().toString(36).slice(2);
 			<option value="3">Administrator</option>
 		</select><br /> }
 		{ Astro.url.searchParams.get('edit') == 'password' && <span>
-			<input name="old_password" placeholder="Old password" type="password" autocomplete="current-password" /><br />
+			<input name="current_password" placeholder="Current password" type="password" autocomplete="current-password" /><br />
 			<input name="new_password" placeholder="New password" type="password" autocomplete="new-password" /><br />
 			<input name="confirm_password" placeholder="Confirm new password" type="password" autocomplete="new-password" /><br />
 		</span>}
@@ -120,9 +120,9 @@ const id = Math.random().toString(36).slice(2);
 		globalThis._id = id;
 	</script>
 	<script>
-		import { deleteAccount, logout, auth, request } from '@blankstorm/api';
+		import { deleteAccount, logout, auth, update, type Account } from '@blankstorm/api';
 
-		const account = JSON.parse(decodeURIComponent(document.getElementById(_id).getAttribute('data-account'))),
+		const account: Account = JSON.parse(decodeURIComponent(document.getElementById(_id).getAttribute('data-account'))),
 			viewer = JSON.parse(decodeURIComponent(document.getElementById(_id).getAttribute('data-viewer')));
 
 		const searchParams = new URLSearchParams(location.search);
@@ -184,20 +184,21 @@ const id = Math.random().toString(36).slice(2);
 		const change = document.querySelector<HTMLElement>('#change')
 		if(change){
 			change.onclick = e => {
-				const key = searchParams.get('edit');
+				const key = searchParams.get('edit') as keyof Account | 'password';
 				if(key == 'password') {
 					const newPassword = document.querySelector<HTMLInputElement>('input[name=new_password]').value;
 					if(newPassword != document.querySelector<HTMLInputElement>('input[name=confirm_password]').value) {
 						return;
 					}
 
-					request('POST', 'account', { action: 'set', key: 'password', value: newPassword, oldPassword: document.querySelector<HTMLInputElement>('input[name=current_password]').value })
+					
+					update(account.id, 'password', newPassword)
 					.then(() => location.reload())
 					.catch(handleError);
 					return;
 				}
 				const value = document.querySelector<HTMLInputElement>(`input[name=${key}]`).value;
-				request('POST', 'account', { action: 'set', key, value })
+				update(account.id, key, value)
 				.then(() => location.reload())
 				.catch(handleError);
 			};

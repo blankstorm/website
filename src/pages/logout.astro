@@ -3,15 +3,15 @@ import Main from '../layouts/Main.astro';
 import { logout } from '@blankstorm/api';
 import { currentUser } from '../utils';
 
-const user = await currentUser(Astro.cookies);
+const account = await currentUser(Astro.cookies);
 
-if (user) {
-	await logout(Astro.cookies.get('token').value);
+if (account) {
+	await logout(account.id);
 	return Astro.redirect('/');
 }
 ---
 
-<Main title="Logout" center account={user}>
+<Main title="Logout" center {account}>
 	<br /><br />
-	{user ? 'Successfully signed you out' : 'You must be signed in to do that!'}
+	{account ? 'Successfully signed you out' : 'You must be signed in to do that!'}
 </Main>

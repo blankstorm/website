@@ -5,7 +5,7 @@ import { currentUser } from '../../utils';
 import { type Account, isValidAccountAttribute, getAccount } from '@blankstorm/api';
 
 const current = await currentUser(Astro.cookies);
-if (!current || current?.oplvl < 0) {
+if (!current || current?.type < 0) {
 	Astro.redirect('/login');
 }
 let key = Astro.url.searchParams.get('key') as keyof Account,

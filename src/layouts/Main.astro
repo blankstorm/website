@@ -55,7 +55,7 @@ const { title, center, account = await currentUser(Astro.cookies) } = Astro.prop
 			<a id="account-link" class="sub-menu" href={ (account ? '/account' : '/login') }>{ account ? 'Logged in as ' + account.username : 'Login'}</a>
 			{account && <div class="sub-menu" style="position:fixed;right:1px;top:50px">
 				<a href="/account">Account</a><br>
-				{account.oplvl > 0 && <a href="/admin">Admin</a><br>}
+				{account.type > 0 && <a href="/admin">Admin</a><br>}
 				<a href="/logout">Log&nbsp;out</a>
 			</div>}
 		</nav><br><br>

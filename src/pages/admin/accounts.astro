@@ -39,10 +39,10 @@ const numAccounts = await getAccountNum();
 			<td>{account.id}</td>
 			<td>{account.username}</td>
 			<td>{account.email}</td>
-			<td>{getAccountRole(account.oplvl)}</td>
+			<td>{getAccountRole(account.type)}</td>
 			<td>{account.created.toString().slice(4, 15)}</td>
 			<td>{account.lastchange.toString().slice(4, 15)}</td>
-			<td>{account.disabled ? 'Yes' : 'No'}</td>
+			<td>{account.is_disabled ? 'Yes' : 'No'}</td>
 			<td>{account.token ? 'Yes' : 'No'}</td>
 			<td>{account.session ? 'Yes' : 'No'}</td>
 		</tr>))}</tbody>

@@ -16,7 +16,7 @@ if (!account) {
 	return Astro.redirect('/login');
 }
 
-if (account.oplvl < minType) {
+if (account.type < minType) {
 	Astro.response.status = 403;
 }
 ---
@@ -24,7 +24,7 @@ if (account.oplvl < minType) {
 <Main title={title} account={account}>
 	<slot />
 	{
-		account.oplvl < minType ? (
+		account.type < minType ? (
 			<div>
 				<h2>Forbidden</h2>
 				<p>You do not have permission to access this.</p>
@@ -32,12 +32,12 @@ if (account.oplvl < minType) {
 		) : (
 			<div>
 				<h3>Actions</h3>
-				{account.oplvl > 2 && (
+				{account.type > 2 && (
 					<a class="action" href="/admin/account">
 						Manage Account
 					</a>
 				)}
-				{account.oplvl > 1 && (
+				{account.type > 1 && (
 					<a class="action" href="/admin/releases">
 						Manage Releases
 					</a>

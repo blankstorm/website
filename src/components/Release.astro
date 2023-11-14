@@ -1,0 +1,45 @@
+---
+import { parse as parseMarkdown } from 'marked';
+import type { Release } from '../types';
+import Asset from './Asset.astro';
+
+interface Props {
+	release: Release;
+}
+
+const { release } = Astro.props;
+---
+
+<div>
+	<style>
+		li {
+			padding-top: 0.25em;
+			padding-bottom: 0.25em;
+		}
+	</style>
+	<a id={release.tag_name}></a>
+	<br />
+	<br />
+	<h3 class="release-title">
+		<a href={'#' + release.tag_name}>{release.name}</a>
+	</h3>
+	{release.prerelease && <em>This is a pre-release</em>}
+	<p class="release-date">
+		Release date:
+		{new Date(release.created_at).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+	</p>
+	<h4>Details</h4>
+	<div class="release-body">
+		{ release.body ? parseMarkdown(release.body) : <span></span> }
+	</div>
+	{
+		release.assets?.length > 0 && (
+			<div>
+				<h4>Downloads</h4>
+				<p>
+					{release.assets?.map((asset: any) => <Asset {asset} />)}
+				</p>
+			</div>
+		)
+	}
+</div>

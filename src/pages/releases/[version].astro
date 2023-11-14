@@ -1,0 +1,38 @@
+---
+import Main from '../../layouts/Main.astro';
+import ReleaseView from '../../components/Release.astro';
+import type { Release } from '../../types';
+
+let error, release: Release;
+
+const { version } = Astro.params;
+
+const is_id = version === (+version).toString() || ['latest'].includes(version);
+
+const release_url = 'https://api.github.com/repos/dr-vortex/blankstorm/releases/' + (is_id ? version : 'tags/' + version);
+
+try {
+	const response = await fetch(release_url);
+	release = await response.json();
+	if('message' in release && typeof release.message == 'string'){
+		const { message } = release;
+		throw message.slice(0, message.indexOf('(') || message.length);
+	}
+} catch (err) {
+	error = err;
+}
+---
+
+<Main title={`Release ${release.name || ''}`}>
+	<span data-release-uri={release_url}></span>
+	{
+		error ? (
+			<span>
+				<br />
+				Failed to fetch release{ typeof error == 'string' && ': ' + error }
+			</span>
+		) : (
+			<ReleaseView {release} />
+		)
+	}
+</Main>

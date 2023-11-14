@@ -1,0 +1,35 @@
+---
+
+interface Asset {
+	name: string;
+	label: string;
+	size: number;
+	download_count: number;
+	browser_download_url: string;
+}
+
+interface Props {
+	asset: Asset;
+	include_downloads?: boolean;
+}
+
+const { asset, include_downloads = true } = Astro.props;
+
+const formatNum = Intl.NumberFormat('en', { notation: 'compact' }).format;
+function formatBytes(bytes: number): string {
+	const unit = Math.floor(Math.log10(bytes) / 3);
+	const adjusted = bytes / 10 ** (3 * unit);
+	return adjusted.toFixed(2) + ' ' + ['B', 'KB', 'MB', 'GB', 'TB'][unit];
+}
+---
+
+<span>
+	<a href={asset.browser_download_url} download={asset.name}>
+		{asset.label || asset.name}
+	</a>
+	<span>
+		&nbsp;{formatBytes(asset.size)}{include_downloads && `, ${formatNum(asset.download_count)} download${asset.download_count != 1 ? 's' : ''}`}
+	</span>
+	<br />
+	<br />
+</span>

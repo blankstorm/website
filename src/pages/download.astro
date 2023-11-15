@@ -1,11 +1,11 @@
 ---
 import Main from '../layouts/Main.astro';
+import { repo_url } from '../repository';
 ---
 
 <Main title="Download">
-	<br><br>
+	<br /><br />
 	<div class="page-content-center">
-		Please download the game <a href="https://github.com/dr-vortex/blankstorm/releases" target="_blank">here</a>. Note that the downloads are in the assets section, which you
-		may have to expand.
+		Please download the game <a href={repo_url + '/releases'} target="_blank">here</a>. Note that the downloads are in the assets section, which you may have to expand.
 	</div>
 </Main>

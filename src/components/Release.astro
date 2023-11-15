@@ -1,6 +1,6 @@
 ---
 import { parse as parseMarkdown } from 'marked';
-import type { Release } from '../types';
+import type { Release } from '../repository';
 import Asset from './Asset.astro';
 
 interface Props {
@@ -8,6 +8,13 @@ interface Props {
 }
 
 const { release } = Astro.props;
+
+let releaseBody: string;
+try {
+	releaseBody = parseMarkdown(release.body);
+} catch (e) {
+	releaseBody = `<p>Failed to parse release body: ${e}</p>`;
+}
 ---
 
 <div>
@@ -29,9 +36,7 @@ const { release } = Astro.props;
 		{new Date(release.created_at).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
 	</p>
 	<h4>Details</h4>
-	<div class="release-body">
-		{ release.body ? parseMarkdown(release.body) : <span></span> }
-	</div>
+	<div class="release-body" set:html={releaseBody}></div>
 	{
 		release.assets?.length > 0 && (
 			<div>

@@ -11,11 +11,13 @@ export default defineConfig({
 	redirects: {
 		'/yt': 'https://www.youtube.com/channel/UCN-3Jifrsg2GwDN8vxTlWrQ',
 		'/discord': 'https://discord.com/invite/ZyTsVR4NCV',
-		'/v': '/versions',
+		'/v': '/releases',
 		'/play': '/download',
-		'/versions': '/changelog',
-		'/bugs': 'https://github.com/dr-vortex/blankstorm/issues',
-		'/docs': 'https://github.com/dr-vortex/blankstorm/wiki',
+		'/versions': '/releases',
+		'/changelog': '/releases',
+		'/bugs': 'https://github.com/blankstorm/blankstorm/issues',
+		'/docs': 'https://github.com/blankstorm/blankstorm/wiki',
+		
 	},
 	markdown: {
 		shikiConfig: {

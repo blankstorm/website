@@ -1,17 +1,18 @@
 ---
 import Main from '../layouts/Main.astro';
 import { parse as parseMarkdown } from 'marked';
-const url = 'https://raw.githubusercontent.com/dr-vortex/blankstorm/main/license.md';
-let error, parsed;
+import { repo_url } from '../repository';
+const url = 'https://raw.githubusercontent.com/blankstorm/blankstorm/main/license.md';
+let html;
 try {
 	const response = await fetch(url);
 	const text = await response.text();
-	parsed = parseMarkdown(text);
+	html = parseMarkdown(text);
 } catch (err) {
-	error = err;
+	html = `<br>Failed to get terms of service. See them <a href="${repo_url + '/blob/main/license.md'}" target="_blank">here</a>`;
 }
 ---
 
 <Main title="Terms of Service" center>
-	{error ? `<br>Failed to get terms of service. See them <a href="${url}" target="_blank">here</a>.` : parsed}
+	<span set:html={html}></span>
 </Main>

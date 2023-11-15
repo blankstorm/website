@@ -1,35 +1,38 @@
 ---
 import Main from '../../layouts/Main.astro';
 import ReleaseView from '../../components/Release.astro';
-import type { Release } from '../../types';
+import { repo_api_url, type Release } from '../../repository';
 
 let error, release: Release;
 
 const { version } = Astro.params;
 
-const is_id = version === (+version).toString() || ['latest'].includes(version);
+const isAlias = ['latest'].includes(version);
 
-const release_url = 'https://api.github.com/repos/dr-vortex/blankstorm/releases/' + (is_id ? version : 'tags/' + version);
+const fetch_url = repo_api_url + '/releases' + (isAlias ? '' : '/tags/' + version);
 
 try {
-	const response = await fetch(release_url);
-	release = await response.json();
-	if('message' in release && typeof release.message == 'string'){
-		const { message } = release;
-		throw message.slice(0, message.indexOf('(') || message.length);
+	const response = await fetch(fetch_url);
+	const result = await response.json();
+
+	if ('message' in result && typeof result.message == 'string') {
+		const { message } = result;
+		const end = message.indexOf('(');
+		throw message.slice(0, end != -1 ? end : message.length);
 	}
+
+	release = isAlias ? result[0] : result;
 } catch (err) {
 	error = err;
 }
 ---
 
-<Main title={`Release ${release.name || ''}`}>
-	<span data-release-uri={release_url}></span>
+<Main title={`Release ${release?.name || ''}`}>
 	{
 		error ? (
-			<span>
+			<span data-fetch-url={fetch_url}>
 				<br />
-				Failed to fetch release{ typeof error == 'string' && ': ' + error }
+				Failed to fetch release{typeof error == 'string' && ': ' + error}
 			</span>
 		) : (
 			<ReleaseView {release} />

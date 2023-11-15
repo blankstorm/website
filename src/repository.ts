@@ -1,4 +1,9 @@
-// GitHub API stuff
+// Repository stuff
+
+export const repo_api_url = 'https://api.github.com/repos/blankstorm/blankstorm';
+
+export const repo_url = 'https://github.com/blankstorm/blankstorm';
+
 /**
  * A release.
  */

@@ -1,18 +1,13 @@
 ---
-import Main from '../../layouts/Main.astro';
 import ReleaseView from '../../components/Release.astro';
-import { repo_api_url, type Release } from '../../repository';
+import Main from '../../layouts/Main.astro';
+import { repo_url, repositoryAPIRequest, type Release } from '../../repository';
 
-let error,
+let error: string | Error | undefined,
 	releases: Release[] = [];
 
 try {
-	const response = await fetch(repo_api_url + '/releases');
-	releases = await response.json();
-	if('message' in releases && typeof releases.message == 'string'){
-		const { message } = releases;
-		throw message.slice(0, message.indexOf('(') || message.length);
-	}
+	releases = await repositoryAPIRequest('/releases');
 	releases.sort((a: Release, b: Release) => (Date.parse(a.created_at) < Date.parse(b.created_at) ? 1 : 0));
 } catch (err) {
 	error = err;
@@ -24,7 +19,7 @@ try {
 		error ? (
 			<span>
 				<br />
-				Failed to fetch changelog. See it&nbsp;<a href="https://github.com/blankstorm/blankstorm/releases" target="_blank">here</a>.
+				Failed to fetch changelog. See it&nbsp;<a href={repo_url + '/releases'} target="_blank">here</a>.
 			</span>
 		) : (
 			releases.map((release: Release) => <ReleaseView {release} />)

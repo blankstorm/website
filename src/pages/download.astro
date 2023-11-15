@@ -1,11 +1,40 @@
 ---
 import Main from '../layouts/Main.astro';
-import { repo_url } from '../repository';
+import Asset from '../components/Asset.astro';
+import { repo_url, repositoryAPIRequest, type Release } from '../repository';
+
+let error: string | Error, release: Release;
+
+try {
+	const result = await repositoryAPIRequest('/releases');
+	release = result[0];
+} catch (err) {
+	error = err;
+}
 ---
 
-<Main title="Download">
+<Main title="Download" center>
 	<br /><br />
-	<div class="page-content-center">
-		Please download the game <a href={repo_url + '/releases'} target="_blank">here</a>. Note that the downloads are in the assets section, which you may have to expand.
-	</div>
+	{
+		error ? (
+			<span>
+				<br />
+				Failed to fetch the latest release.
+			</span>
+		) : release.assets?.length == 0 ? (
+			<span>
+				<br />
+				The latest release does not have any downloads.
+			</span>
+		) : (
+			<div>
+				<h4>Downloads</h4>
+				<p>
+					{release.assets?.map((asset: any) => (
+						<Asset {asset} />
+					))}
+				</p>
+			</div>
+		)
+	}
 </Main>

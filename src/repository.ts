@@ -5,7 +5,11 @@ export const repo_api_url = 'https://api.github.com/repos/blankstorm/blankstorm'
 export const repo_url = 'https://github.com/blankstorm/blankstorm';
 
 export async function repositoryAPIRequest(url: string) {
-	const response = await fetch(repo_api_url + url);
+	const response = await fetch(repo_api_url + url, {
+		headers: {
+			'User-Agent': 'Blankstorm Frontend'
+		}
+	});
 	const result = await response.json();
 
 	if ('message' in result && typeof result.message == 'string') {

@@ -3,7 +3,7 @@ import Main from '../layouts/Main.astro';
 import { parse as parseMarkdown } from 'marked';
 import { repo_url } from '../repository';
 const url = 'https://raw.githubusercontent.com/blankstorm/blankstorm/main/license.md';
-let html;
+let html: string;
 try {
 	const response = await fetch(url);
 	const text = await response.text();

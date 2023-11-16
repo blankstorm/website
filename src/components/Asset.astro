@@ -28,7 +28,7 @@ function formatBytes(bytes: number): string {
 		{asset.label || asset.name}
 	</a>
 	<span>
-		&nbsp;{formatBytes(asset.size)}{include_downloads && `, ${formatNum(asset.download_count)} download${asset.download_count != 1 ? 's' : ''}`}
+		&nbsp;{formatBytes(asset.size)}{include_downloads && ` (${formatNum(asset.download_count)} download${asset.download_count != 1 ? 's' : ''})`}
 	</span>
 	<br />
 	<br />

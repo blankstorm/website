@@ -8,7 +8,6 @@ interface Props {
 
 
 let { account, viewer } = Astro.props;
-viewer ||= account;
 const editable = account === viewer || viewer.type > Math.max(account.type, 1);
 const id = Math.random().toString(36).slice(2);
 ---

@@ -77,10 +77,10 @@ const id = Math.random().toString(36).slice(2);
 			<td>Username</td>
 			<td>{account.username}&nbsp;&nbsp;{editable && <a href="?edit=username"><svg class="icon"><use href="#icon.edit" /></svg></a>}</td>
 		</tr>
-		<tr>
+		{(viewer === account || viewer?.type > 0) && <tr>
 			<td>Email</td>
 			<td>{account.email}&nbsp;&nbsp;{editable && <a href="?edit=email"><svg class="icon"><use href="#icon.edit" /></svg></a>}</td>
-		</tr>
+		</tr>}
 		<tr>
 			<td>Type</td>
 			<td>{getAccountRole(account.type)}&nbsp;&nbsp;{editable && viewer && <a href="?edit=type"><svg class="icon"><use href="#icon.edit" /></svg></a>}</td>	
@@ -93,15 +93,15 @@ const id = Math.random().toString(36).slice(2);
 			<td>Username last changed</td>
 			<td>{account.lastchange.toString().slice(0, 15) }</td>
 		</tr>
-		{viewer && viewer.type > 0 && <tr>
+		{viewer?.type > 0 && <tr>
 			<td>Disabled</td>
 			<td>{account.is_disabled ? 'Yes' : 'No' }</td>
 		</tr>}	
-		{viewer && viewer.type > 0 && <tr>
+		{viewer?.type > 0 && <tr>
 			<td>Logged in</td>
 			<td>{account.token ? 'Yes' : 'No' }</td>
 		</tr>}
-		{viewer && viewer.type > 0 && <tr>
+		{viewer?.type > 0 && <tr>
 			<td>Active session</td>
 			<td>{account.session ? 'Yes' : 'No' }</td>
 		</tr>}

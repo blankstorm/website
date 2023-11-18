@@ -1,5 +1,12 @@
 ---
 import Admin from '../../layouts/Admin.astro';
+import { checkAdminAuth } from '../../utils';
+
+const account = await checkAdminAuth(Astro);
+
+if(account instanceof Response) {
+	return account;
+}
 ---
 
-<Admin></Admin>
+<Admin {account}></Admin>

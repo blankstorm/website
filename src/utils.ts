@@ -1,5 +1,5 @@
-import type { AstroCookies } from 'astro';
-import { type Account, getAccount, auth, config } from '@blankstorm/api';
+import type { AstroCookies, AstroGlobal } from 'astro';
+import { type Account, getAccount, auth, config, AccountType } from '@blankstorm/api';
 
 config.throw_errors = false;
 
@@ -27,4 +27,20 @@ export async function parseBody<V extends Record<string, FormDataEntryValue>>(re
 			const text = await request.text();
 			return JSON.parse(text);
 	}
+}
+
+export async function checkAdminAuth(astro: Readonly<AstroGlobal>, minType?: AccountType): Promise<Account | Response> {
+	const account = await currentUser(astro.cookies);
+
+	minType ||= 1; // to prevent 0 from being passed
+
+	if (!account) {
+		return astro.redirect('/login');
+	}
+
+	if (account.type < minType) {
+		astro.response.status = 403;
+	}
+
+	return account;
 }

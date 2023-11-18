@@ -1,13 +1,15 @@
 ---
 import Admin from '../../layouts/Admin.astro';
 import AccountView from '../../components/Account.astro';
-import { currentUser } from '../../utils';
+import { checkAdminAuth, currentUser } from '../../utils';
 import { type Account, isValidAccountAttribute, getAccount } from '@blankstorm/api';
 
-const current = await currentUser(Astro.cookies);
-if (!current || current?.type < 0) {
-	Astro.redirect('/login');
+const viewer = await checkAdminAuth(Astro);
+
+if(viewer instanceof Response) {
+	return viewer;
 }
+
 let key = Astro.url.searchParams.get('key') as keyof Account,
 	value: string = Astro.url.searchParams.get('value') as string,
 	account: Account = {} as Account;
@@ -23,7 +25,7 @@ if (isValidAccountAttribute(key, value)) {
 }
 ---
 
-<Admin account={current} title="Manage account">
+<Admin account={viewer} title="Manage account">
 	<br /><br /><br />
 	<form method="get">
 		<select name="key" value={key || 'id'}>
@@ -35,5 +37,5 @@ if (isValidAccountAttribute(key, value)) {
 		<input name="value" value={value} />
 		<button>Submit</button>
 	</form>
-	<AccountView account={account} viewer={current} />
+	<AccountView account={account} viewer={viewer} />
 </Admin>

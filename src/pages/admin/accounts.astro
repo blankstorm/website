@@ -1,6 +1,13 @@
 ---
 import Admin from '../../layouts/Admin.astro';
 import { getAllAccounts, getAccountNum, getAccountRole } from '@blankstorm/api';
+import { checkAdminAuth } from '../../utils';
+
+const account = await checkAdminAuth(Astro);
+
+if(account instanceof Response) {
+	return account;
+}
 
 const from = parseInt(Astro.url.searchParams.get('from') || '0');
 const to = parseInt(Astro.url.searchParams.get('to') || '1000');
@@ -8,7 +15,7 @@ const accounts = await getAllAccounts();
 const numAccounts = await getAccountNum();
 ---
 
-<Admin title="View Accounts" minType={2}>
+<Admin title="View Accounts" minType={2} {account}>
 	<style>
 		td {
 			padding: 0.33em;

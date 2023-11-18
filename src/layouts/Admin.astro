@@ -1,27 +1,19 @@
 ---
 import Main from './Main.astro';
-import { currentUser } from '../utils';
 import type { Account, AccountType } from '@blankstorm/api';
 
 interface Props {
-	account?: Account;
+	account: Account;
 	minType?: AccountType;
 	title?: string;
 }
 
-let { account = await currentUser(Astro.cookies), minType, title = 'Admin' } = Astro.props;
+let { account, minType, title = 'Admin' } = Astro.props;
 minType ||= 1; // to prevent 0 from being passed
 
-if (!account) {
-	return Astro.redirect('/login');
-}
-
-if (account.type < minType) {
-	Astro.response.status = 403;
-}
 ---
 
-<Main title={title} account={account}>
+<Main {title} {account}>
 	<slot />
 	{
 		account.type < minType ? (

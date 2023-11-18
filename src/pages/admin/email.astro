@@ -1,10 +1,11 @@
 ---
 import Admin from '../../layouts/Admin.astro';
-import { currentUser } from '../../utils';
-const sender = await currentUser(Astro.cookies);
+import { checkAdminAuth, currentUser } from '../../utils';
 
-if(!sender) {
-	return Astro.redirect('/login');
+const sender = await checkAdminAuth(Astro);
+
+if(sender instanceof Response) {
+	return sender;
 }
 ---
 <Admin title="Send email" minType={2} account={sender}>

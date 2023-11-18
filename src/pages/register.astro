@@ -8,7 +8,7 @@ let error;
 if (Astro.request.method == 'POST') {
 	try {
 		const body = await parseBody<{ username: string; email: string; password: string }>(Astro.request);
-		const account = await createAccount(body.username, body.email, body.password);
+		const account = await createAccount(body.email, body.username, body.password);
 
 		const { token } = await login(body.username, body.password);
 		Astro.cookies.set('token', token, { expires: new Date(Date.now() + 3600_000 * 24 * 28) });

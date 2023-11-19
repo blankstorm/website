@@ -17,7 +17,7 @@
 	},
 	"dependencies": {
 		"@astrojs/cloudflare": "^7.6.4",
-		"@blankstorm/api": "^0.4.2",
+		"@blankstorm/api": "^0.4.4",
 		"@sendgrid/mail": "^7.7.0",
 		"astro": "^3.0.12",
 		"jquery": "^3.7.1",

@@ -1,6 +1,6 @@
 ---
 import Main from './Main.astro';
-import { StatusCodes, ReasonPhrases } from 'http-status-codes';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
 
 interface Props {
 	status: StatusCodes;
@@ -8,9 +8,15 @@ interface Props {
 
 const { status = StatusCodes.INTERNAL_SERVER_ERROR } = Astro.props;
 
-const statusText = StatusCodes[status].toLowerCase().replace(/(?:^|\s)\S/g, a => a.toUpperCase());
+const statusText = ReasonPhrases[status] ?? 'Unknown error';
+
+const details: { [key in StatusCodes]?: string } = {
+	400: '',
+	404: 'The requested resource could not be found',
+};
 ---
+
 <Main title={statusText} center>
 	<h1>{statusText}</h1>
-	<p>ReasonPhrases[status]</p>
+	{details[status] && <p>details[status]</p>}
 </Main>

@@ -1,0 +1,8 @@
+---
+import HTTPError from '../layouts/HTTPError.astro';
+
+const { error } = Astro.params;
+
+const status = +error >= 100 && +error < 600 ? +error : 404;
+---
+<HTTPError {status} />

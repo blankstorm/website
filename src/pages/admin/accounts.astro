@@ -41,7 +41,7 @@ const numAccounts = await getAccountNum();
 		</thead>
 		<tbody>{accounts.map(account => (console.log(account), <tr>
 			<td>
-				<a href={'/admin/account?id=' + account.id}>Manage</a>
+				<a href={'/account/' + account.id}>Manage</a>
 			</td>
 			<td>{account.id}</td>
 			<td>{account.username}</td>

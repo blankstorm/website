@@ -1,8 +1,20 @@
 ---
-import HTTPError from '../layouts/HTTPError.astro';
+import { ReasonPhrases, StatusCodes } from 'http-status-codes';
+import Main from '../layouts/Main.astro';
 
 const { error } = Astro.params;
 
 const status = +error >= 100 && +error < 600 ? +error : 404;
+
+const statusText = ReasonPhrases[StatusCodes[status]] ?? 'Unknown error';
+
+const details: { [key in StatusCodes]?: string } = {
+	400: 'The server cannot or will not process the request due to a client error',
+	404: 'The requested resource could not be found',
+};
 ---
-<HTTPError {status} />
+
+<Main title={statusText} center>
+	<h1>{statusText}</h1>
+	{status in details && <p>{details[status]}</p>}
+</Main>

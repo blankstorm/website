@@ -1,3 +1,6 @@
+:root {
+	color-scheme: only dark;
+}
 nav {
 	background-color: hsl(200, 50%, 50%);
 	position: fixed;

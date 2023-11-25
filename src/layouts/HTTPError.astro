@@ -18,5 +18,5 @@ const details: { [key in StatusCodes]?: string } = {
 
 <Main title={statusText} center>
 	<h1>{statusText}</h1>
-	{details[status] && <p>details[status]</p>}
+	{details[status] && <p>{details[status]}</p>}
 </Main>

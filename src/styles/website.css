@@ -29,7 +29,7 @@ nav div {
 
 nav div.sub-menu {
 	display: none;
-	border-radius: .33em;
+	border-radius: 0.33em;
 }
 
 nav a.sub-menu:hover + div.sub-menu,
@@ -52,7 +52,7 @@ svg.icon {
 	display: inline;
 	width: 1em;
 	height: 1em;
-	fill:hsla(200, 100%, 90%, 0.8);
+	fill: hsla(200, 100%, 90%, 0.8);
 }
 
 svg.icon.source {
@@ -82,7 +82,7 @@ svg.icon.source {
 }
 
 a.action {
-	background: hsla(200,50%,25%,1);
+	background: hsla(200, 50%, 25%, 1);
 	padding: 10px 20px 10px 20px;
 	margin: 5px 10px 5px 10px;
 	border-radius: 4px;

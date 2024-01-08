@@ -16,10 +16,10 @@
 		"url": "https://github.com/blankstorm/website/issues"
 	},
 	"dependencies": {
-		"@astrojs/cloudflare": "^7.6.4",
+		"@astrojs/cloudflare": "^8.0.2",
 		"@blankstorm/api": "^0.4.4",
 		"@sendgrid/mail": "^7.7.0",
-		"astro": "^3.0.12",
+		"astro": "^4.1.1",
 		"jquery": "^3.7.1",
 		"mariadb": "^3.2.2",
 		"marked": "^8.0.0"

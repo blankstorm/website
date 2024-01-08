@@ -50,14 +50,14 @@ const id = Math.random().toString(36).slice(2);
 	</div>}
 	{(editable && Astro.url.searchParams.has('edit')) && 
 	<div id="edit-container">
-		{ Astro.url.searchParams.get('edit') == 'username' && <input name="username" placeholder="New username" autocomplete="on" /><br />}
-		{ Astro.url.searchParams.get('edit') == 'email' && <input name="email" placeholder="New email" type="email" autocomplete="email" /><br />}
-		{ (Astro.url.searchParams.get('edit') == 'type') && <select name="type">
+		{ Astro.url.searchParams.get('edit') == 'username' && <><input name="username" placeholder="New username" autocomplete="on" /><br /></>}
+		{ Astro.url.searchParams.get('edit') == 'email' && <><input name="email" placeholder="New email" type="email" autocomplete="email" /><br /></>}
+		{ (Astro.url.searchParams.get('edit') == 'type') && <><select name="type">
 			<option value="0">User</option>
 			<option value="1">Moderator</option>
 			<option value="2">Developer</option>
 			<option value="3">Administrator</option>
-		</select><br /> }
+		</select><br /></> }
 		{ Astro.url.searchParams.get('edit') == 'password' && <span>
 			<input name="current_password" placeholder="Current password" type="password" autocomplete="current-password" /><br />
 			<input name="new_password" placeholder="New password" type="password" autocomplete="new-password" /><br />
@@ -65,7 +65,7 @@ const id = Math.random().toString(36).slice(2);
 		</span>}
 		<br /><button id="change">Change</button>
 	</div>}
-	{account?.id && (
+	{account?.id && <>
 	<h1>Account</h1>
 	<table>
 		<tr>
@@ -106,14 +106,14 @@ const id = Math.random().toString(36).slice(2);
 		</tr>}
 	</table>
 	<br />	
-	)}
+	</>}
 	<button id="refresh" onclick="location.reload()">Refresh</button>
 	{account && <h3>Account Actions</h3>}
-	{account && editable && (
+	{account && editable && <>
 		<a href="?edit=password"><button>Change password</button></a>
 		<button id="logout">Logout</button>
 		<button id="delete"> Delete account</button>
-	)}
+	</>}
 	{editable && account != viewer && <a href={`/admin/email?to=${encodeURIComponent(`${account.username} <${account.email}>`)}`}><button>Email</button></a>}
 	{editable && (account.is_disabled ? viewer.type > account.type && <button id="#enable">Enable</button> : <button id="#disable">Disable</button> )}
 	<script define:vars={{ id }}>

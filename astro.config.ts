@@ -5,7 +5,7 @@ export default defineConfig({
 	output: 'server',
 	adapter: cloudflare({
 		mode: 'directory',
-		runtime: { mode: 'local' }
+		runtime: { mode: 'local', type: 'pages' }
 	}),
 	site: 'https://blankstorm.net',
 	redirects: {

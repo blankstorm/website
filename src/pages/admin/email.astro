@@ -4,33 +4,34 @@ import { checkAdminAuth, currentUser } from '../../utils';
 
 const sender = await checkAdminAuth(Astro);
 
-if(sender instanceof Response) {
+if (sender instanceof Response) {
 	return sender;
 }
 ---
+
 <Admin title="Send email" minType={2} account={sender}>
 	<h2>Send email</h2>
 	<div class="error">
 		<p>Emails can't be sent currently.</p>
 	</div>
 	<form method="post">
-		<label for="from">From: </label>
-		<input name="from" value={sender.username} size="10">
+		<label for="from">From:</label>
+		<input name="from" value={sender.username} size="10" />
 		<select name="address" value={sender.email}>
 			<option value={sender.email}>{sender.email}</option>
 			<option value="support@blankstorm.net">support@blankstorm.net</option>
-		</select><br><br>
-		<label for="to">To: </label>
+		</select><br /><br />
+		<label for="to">To:</label>
 		<select name="to" value={Astro.url.searchParams.get('to')}>
-			{ Astro.url.searchParams.has('to') && <option value={Astro.url.searchParams.get('to')}>{Astro.url.searchParams.get('to')}</option>}
+			{Astro.url.searchParams.has('to') && <option value={Astro.url.searchParams.get('to')}>{Astro.url.searchParams.get('to')}</option>}
 			<option value="owner">Owners</option>
 			<option value="administrator">Administrators</option>
 			<option value="developer">Developers</option>
 			<option value="moderator">Moderators</option>
 			<option value="user">Users</option>
-		</select><br><br>
-		<label for="subject">Subject: </label><input name="subject" size="50"><br><br>
-		<textarea name="content" cols="100" rows="10"></textarea><br><br>
+		</select><br /><br />
+		<label for="subject">Subject:</label><input name="subject" size="50" /><br /><br />
+		<textarea name="content" cols="100" rows="10"></textarea><br /><br />
 		<button>Send</button>
 	</form>
-</Admin> 
+</Admin>

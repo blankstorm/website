@@ -6,13 +6,24 @@ interface Props {
 	viewer?: Account;
 }
 
-
 let { account, viewer } = Astro.props;
 const editable = account === viewer || viewer?.type > Math.max(account.type, 1);
 const id = Math.random().toString(36).slice(2);
 ---
-{editable && <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="icon.edit" class="icon source"><path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.8 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" /></svg>}
-<div class="account" data-account={encodeURIComponent(JSON.stringify(account ? stripAccountInfo(account) : null))} data-viewer={encodeURIComponent(JSON.stringify(viewer ? stripAccountInfo(viewer) : null))} id={id}>
+
+{
+	editable && (
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" id="icon.edit" class="icon source">
+			<path d="M471.6 21.7c-21.9-21.9-57.3-21.9-79.2 0L362.3 51.7l97.9 97.9 30.1-30.1c21.9-21.9 21.9-57.3 0-79.2L471.6 21.7zm-299.2 220c-6.1 6.1-10.8 13.6-13.5 21.9l-29.6 88.8c-2.9 8.6-.6 18.1 5.8 24.6s15.9 8.7 24.6 5.8l88.8-29.6c8.2-2.8 15.7-7.4 21.9-13.5L437.7 172.3 339.7 74.3 172.4 241.7zM96 64C43 64 0 107 0 160V416c0 53 43 96 96 96H352c53 0 96-43 96-96V320c0-17.7-14.3-32-32-32s-32 14.3-32 32v96c0 17.7-14.3 32-32 32H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h96c17.7 0 32-14.3 32-32s-14.3-32-32-32H96z" />
+		</svg>
+	)
+}
+<div
+	class="account"
+	data-account={encodeURIComponent(JSON.stringify(account ? stripAccountInfo(account) : null))}
+	data-viewer={encodeURIComponent(JSON.stringify(viewer ? stripAccountInfo(viewer) : null))}
+	id={id}
+>
 	<style>
 		svg:hover {
 			cursor: pointer;
@@ -27,7 +38,7 @@ const id = Math.random().toString(36).slice(2);
 		}
 		input {
 			padding: 0.25em;
-			margin: .5em;
+			margin: 0.5em;
 		}
 		table {
 			background-color: inherit;
@@ -45,77 +56,158 @@ const id = Math.random().toString(36).slice(2);
 		<button class="no">No</button><button class="yes">Yes</button>
 	</dialog>
 	<br />
-	{!account && <div class="error">
-		<p>An account was not specified or does not exist</p>
-	</div>}
-	{(editable && Astro.url.searchParams.has('edit')) && 
-	<div id="edit-container">
-		{ Astro.url.searchParams.get('edit') == 'username' && <><input name="username" placeholder="New username" autocomplete="on" /><br /></>}
-		{ Astro.url.searchParams.get('edit') == 'email' && <><input name="email" placeholder="New email" type="email" autocomplete="email" /><br /></>}
-		{ (Astro.url.searchParams.get('edit') == 'type') && <><select name="type">
-			<option value="0">User</option>
-			<option value="1">Moderator</option>
-			<option value="2">Developer</option>
-			<option value="3">Administrator</option>
-		</select><br /></> }
-		{ Astro.url.searchParams.get('edit') == 'password' && <span>
-			<input name="current_password" placeholder="Current password" type="password" autocomplete="current-password" /><br />
-			<input name="new_password" placeholder="New password" type="password" autocomplete="new-password" /><br />
-			<input name="confirm_password" placeholder="Confirm new password" type="password" autocomplete="new-password" /><br />
-		</span>}
-		<br /><button id="change">Change</button>
-	</div>}
-	{account?.id && <>
-	<h1>Account</h1>
-	<table>
-		<tr>
-			<td>Account ID</td>
-			<td>{account.id}</td>
-		</tr>
-		<tr>
-			<td>Username</td>
-			<td>{account.username}&nbsp;&nbsp;{editable && <a href="?edit=username"><svg class="icon"><use href="#icon.edit" /></svg></a>}</td>
-		</tr>
-		{(viewer === account || viewer?.type > 0) && <tr>
-			<td>Email</td>
-			<td>{account.email}&nbsp;&nbsp;{editable && <a href="?edit=email"><svg class="icon"><use href="#icon.edit" /></svg></a>}</td>
-		</tr>}
-		<tr>
-			<td>Type</td>
-			<td>{getAccountRole(account.type)}&nbsp;&nbsp;{editable && viewer && <a href="?edit=type"><svg class="icon"><use href="#icon.edit" /></svg></a>}</td>	
-		</tr>
-		<tr>
-		<td>Created</td>
-			<td>{account.created.toString().slice(0, 15)}</td>
-		</tr>
-		<tr>
-			<td>Username last changed</td>
-			<td>{account.lastchange.toString().slice(0, 15) }</td>
-		</tr>
-		{viewer?.type > 0 && <tr>
-			<td>Disabled</td>
-			<td>{account.is_disabled ? 'Yes' : 'No' }</td>
-		</tr>}	
-		{viewer?.type > 0 && <tr>
-			<td>Logged in</td>
-			<td>{account.token ? 'Yes' : 'No' }</td>
-		</tr>}
-		{viewer?.type > 0 && <tr>
-			<td>Active session</td>
-			<td>{account.session ? 'Yes' : 'No' }</td>
-		</tr>}
-	</table>
-	<br />	
-	</>}
+	{
+		!account && (
+			<div class="error">
+				<p>An account was not specified or does not exist</p>
+			</div>
+		)
+	}
+	{
+		editable && Astro.url.searchParams.has('edit') && (
+			<div id="edit-container">
+				{Astro.url.searchParams.get('edit') == 'username' && (
+					<>
+						<input name="username" placeholder="New username" autocomplete="on" />
+						<br />
+					</>
+				)}
+				{Astro.url.searchParams.get('edit') == 'email' && (
+					<>
+						<input name="email" placeholder="New email" type="email" autocomplete="email" />
+						<br />
+					</>
+				)}
+				{Astro.url.searchParams.get('edit') == 'type' && (
+					<>
+						<select name="type">
+							<option value="0">User</option>
+							<option value="1">Moderator</option>
+							<option value="2">Developer</option>
+							<option value="3">Administrator</option>
+						</select>
+						<br />
+					</>
+				)}
+				{Astro.url.searchParams.get('edit') == 'password' && (
+					<span>
+						<input name="current_password" placeholder="Current password" type="password" autocomplete="current-password" />
+						<br />
+						<input name="new_password" placeholder="New password" type="password" autocomplete="new-password" />
+						<br />
+						<input name="confirm_password" placeholder="Confirm new password" type="password" autocomplete="new-password" />
+						<br />
+					</span>
+				)}
+				<>
+					<br />
+					<button id="change">Change</button>
+				</>
+			</div>
+		)
+	}
+	{
+		account?.id && (
+			<>
+				<h1>Account</h1>
+				<table>
+					<tr>
+						<td>Account ID</td>
+						<td>{account.id}</td>
+					</tr>
+					<tr>
+						<td>Username</td>
+						<td>
+							{account.username}&nbsp;&nbsp;
+							{editable && (
+								<a href="?edit=username">
+									<svg class="icon">
+										<use href="#icon.edit" />
+									</svg>
+								</a>
+							)}
+						</td>
+					</tr>
+					{(viewer === account || viewer?.type > 0) && (
+						<tr>
+							<td>Email</td>
+							<td>
+								{account.email}&nbsp;&nbsp;
+								{editable && (
+									<a href="?edit=email">
+										<svg class="icon">
+											<use href="#icon.edit" />
+										</svg>
+									</a>
+								)}
+							</td>
+						</tr>
+					)}
+					<tr>
+						<td>Type</td>
+						<td>
+							{getAccountRole(account.type)}&nbsp;&nbsp;
+							{editable && viewer && (
+								<a href="?edit=type">
+									<svg class="icon">
+										<use href="#icon.edit" />
+									</svg>
+								</a>
+							)}
+						</td>
+					</tr>
+					<tr>
+						<td>Created</td>
+						<td>{account.created.toString().slice(0, 15)}</td>
+					</tr>
+					<tr>
+						<td>Username last changed</td>
+						<td>{account.lastchange.toString().slice(0, 15)}</td>
+					</tr>
+					{viewer?.type > 0 && (
+						<tr>
+							<td>Disabled</td>
+							<td>{account.is_disabled ? 'Yes' : 'No'}</td>
+						</tr>
+					)}
+					{viewer?.type > 0 && (
+						<tr>
+							<td>Logged in</td>
+							<td>{account.token ? 'Yes' : 'No'}</td>
+						</tr>
+					)}
+					{viewer?.type > 0 && (
+						<tr>
+							<td>Active session</td>
+							<td>{account.session ? 'Yes' : 'No'}</td>
+						</tr>
+					)}
+				</table>
+				<br />
+			</>
+		)
+	}
 	<button id="refresh" onclick="location.reload()">Refresh</button>
 	{account && <h3>Account Actions</h3>}
-	{account && editable && <>
-		<a href="?edit=password"><button>Change password</button></a>
-		<button id="logout">Logout</button>
-		<button id="delete"> Delete account</button>
-	</>}
-	{editable && account != viewer && <a href={`/admin/email?to=${encodeURIComponent(`${account.username} <${account.email}>`)}`}><button>Email</button></a>}
-	{editable && (account.is_disabled ? viewer.type > account.type && <button id="#enable">Enable</button> : <button id="#disable">Disable</button> )}
+	{
+		account && editable && (
+			<>
+				<a href="?edit=password">
+					<button>Change password</button>
+				</a>
+				<button id="logout">Logout</button>
+				<button id="delete"> Delete account</button>
+			</>
+		)
+	}
+	{
+		editable && account != viewer && (
+			<a href={`/admin/email?to=${encodeURIComponent(`${account.username} <${account.email}>`)}`}>
+				<button>Email</button>
+			</a>
+		)
+	}
+	{editable && (account.is_disabled ? viewer.type > account.type && <button id="#enable">Enable</button> : <button id="#disable">Disable</button>)}
 	<script define:vars={{ id }}>
 		globalThis._id = id;
 	</script>
@@ -128,7 +220,7 @@ const id = Math.random().toString(36).slice(2);
 		const searchParams = new URLSearchParams(location.search);
 
 		function getCookie(name: string) {
-			name += '='
+			name += '=';
 			const cookies = decodeURIComponent(document.cookie).split(';');
 			for (const cookie of cookies) {
 				const trimmed = cookie.trim();
@@ -150,8 +242,8 @@ const id = Math.random().toString(36).slice(2);
 		auth(authToken);
 
 		const deleteButton = document.querySelector<HTMLButtonElement>('#delete'),
-		deleteDialog = document.querySelector<HTMLDialogElement>('#delete-dialog');
-		if(deleteButton) {
+			deleteDialog = document.querySelector<HTMLDialogElement>('#delete-dialog');
+		if (deleteButton) {
 			deleteButton.onclick = deleteDialog.showModal;
 		}
 
@@ -161,15 +253,15 @@ const id = Math.random().toString(36).slice(2);
 
 		document.querySelector<HTMLButtonElement>('#delete-dialog .yes').onclick = () => {
 			deleteAccount(account.id, 'User deleted account')
-			.then(() => location.href = '/')
-			.catch(handleError);
+				.then(() => (location.href = '/'))
+				.catch(handleError);
 		};
 
-		const logoutButton = document.querySelector<HTMLButtonElement>('#logout'), logoutDialog = document.querySelector<HTMLDialogElement>('#logout-dialog');
-		if(logoutButton) {
+		const logoutButton = document.querySelector<HTMLButtonElement>('#logout'),
+			logoutDialog = document.querySelector<HTMLDialogElement>('#logout-dialog');
+		if (logoutButton) {
 			logoutButton.onclick = logoutDialog.showModal;
 		}
-		
 
 		document.querySelector<HTMLButtonElement>('#logout-dialog .no').onclick = () => {
 			logoutDialog.close();
@@ -177,31 +269,30 @@ const id = Math.random().toString(36).slice(2);
 
 		document.querySelector<HTMLButtonElement>('#logout-dialog .yes').onclick = () => {
 			logout(account.id)
-			.then(() => location.href = '/')
-			.catch(handleError);
+				.then(() => (location.href = '/'))
+				.catch(handleError);
 		};
 
-		const change = document.querySelector<HTMLElement>('#change')
-		if(change){
+		const change = document.querySelector<HTMLElement>('#change');
+		if (change) {
 			change.onclick = e => {
 				const key = searchParams.get('edit') as keyof Account | 'password';
-				if(key == 'password') {
+				if (key == 'password') {
 					const newPassword = document.querySelector<HTMLInputElement>('input[name=new_password]').value;
-					if(newPassword != document.querySelector<HTMLInputElement>('input[name=confirm_password]').value) {
+					if (newPassword != document.querySelector<HTMLInputElement>('input[name=confirm_password]').value) {
 						return;
 					}
 
-					
 					update(account.id, 'password', newPassword)
-					.then(() => location.reload())
-					.catch(handleError);
+						.then(() => location.reload())
+						.catch(handleError);
 					return;
 				}
 				const value = document.querySelector<HTMLInputElement>(`[name=${key}]`).value;
 				update(account.id, key, value)
-				.then(() => location.reload())
-				.catch(handleError);
+					.then(() => location.reload())
+					.catch(handleError);
 			};
 		}
-		</script>
+	</script>
 </div>

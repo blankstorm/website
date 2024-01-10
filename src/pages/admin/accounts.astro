@@ -5,7 +5,7 @@ import { checkAdminAuth } from '../../utils';
 
 const account = await checkAdminAuth(Astro);
 
-if(account instanceof Response) {
+if (account instanceof Response) {
 	return account;
 }
 
@@ -39,19 +39,30 @@ const numAccounts = await getAccountNum();
 				<td>Action Session</td>
 			</tr>
 		</thead>
-		<tbody>{accounts.map(account => (console.log(account), <tr>
-			<td>
-				<a href={'/account/' + account.id}>Manage</a>
-			</td>
-			<td>{account.id}</td>
-			<td>{account.username}</td>
-			<td>{account.email}</td>
-			<td>{getAccountRole(account.type)}</td>
-			<td>{account.created.toString().slice(4, 15)}</td>
-			<td>{account.lastchange.toString().slice(4, 15)}</td>
-			<td>{account.is_disabled ? 'Yes' : 'No'}</td>
-			<td>{account.token ? 'Yes' : 'No'}</td>
-			<td>{account.session ? 'Yes' : 'No'}</td>
-		</tr>))}</tbody>
+		<tbody
+			>{
+				accounts.map(
+					account => (
+						console.log(account),
+						(
+							<tr>
+								<td>
+									<a href={'/account/' + account.id}>Manage</a>
+								</td>
+								<td>{account.id}</td>
+								<td>{account.username}</td>
+								<td>{account.email}</td>
+								<td>{getAccountRole(account.type)}</td>
+								<td>{account.created.toString().slice(4, 15)}</td>
+								<td>{account.lastchange.toString().slice(4, 15)}</td>
+								<td>{account.is_disabled ? 'Yes' : 'No'}</td>
+								<td>{account.token ? 'Yes' : 'No'}</td>
+								<td>{account.session ? 'Yes' : 'No'}</td>
+							</tr>
+						)
+					)
+				)
+			}</tbody
+		>
 	</table>
 </Admin>

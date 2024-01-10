@@ -19,7 +19,11 @@ try {
 		error ? (
 			<span>
 				<br />
-				Failed to fetch changelog. See it&nbsp;<a href={repo_url + '/releases'} target="_blank">here</a>.
+				Failed to fetch changelog. See it&nbsp;
+				<a href={repo_url + '/releases'} target="_blank">
+					here
+				</a>
+				.
 			</span>
 		) : (
 			releases.map((release: Release) => <ReleaseView {release} />)

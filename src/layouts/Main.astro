@@ -1,4 +1,4 @@
---- 
+---
 import type { Account } from '@blankstorm/api';
 import '../styles/styles.css';
 import '../styles/website.css';
@@ -19,13 +19,13 @@ const { title, center, account = await currentUser(Astro.cookies) } = Astro.prop
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/png" href="/icon.png" />
-		<meta name="description" content="Blankstorm is a free Sandbox/RTS game. Command your own fleet of starships and explore the galaxy!">
-		<meta name="author" content="Dr. Vortex">
-		<meta name="keywords" content="vortex,blankstorm,game,space">
-		<meta name="page-topic" content="Gaming">
+		<meta name="description" content="Blankstorm is a free Sandbox/RTS game. Command your own fleet of starships and explore the galaxy!" />
+		<meta name="author" content="Dr. Vortex" />
+		<meta name="keywords" content="vortex,blankstorm,game,space" />
+		<meta name="page-topic" content="Gaming" />
 		<meta name="generator" content={Astro.generator} />
 		<title>Blankstorm - {title}</title>
-		<slot name="in-header"></slot>
+		<slot name="in-header" />
 		<style>
 			.center-content {
 				position: absolute;
@@ -38,27 +38,47 @@ const { title, center, account = await currentUser(Astro.cookies) } = Astro.prop
 	<body>
 		<nav>
 			<a href="/" style="padding-top:2%">Home</a>
-			<a href=/docs target=_blank class="sub-menu">Documentation</a>
-			<div class="sub-menu" style=position:fixed;top:50px;left:130px>
-				<a href=/docs/commands target=_blank>Commands</a><br>
-				<a href=/docs/selectors target=_blank>Selectors</a><br>
+			<a href="/docs" target="_blank" class="sub-menu">Documentation</a>
+			<div class="sub-menu" style="position:fixed;top:50px;left:130px">
+				<a href="/docs/commands" target="_blank">Commands</a><br />
+				<a href="/docs/selectors" target="_blank">Selectors</a><br />
 			</div>
-			<a href=/releases class="sub-menu">Releases & Bugs</a>
-			<div class="sub-menu" style=position:fixed;top:50px;left:300px>
-				<a href=/releases>Changelog</a><br>
-				<a href=/bugs target=_blank>Bugs</a><br>
+			<a href="/releases" class="sub-menu">Releases & Bugs</a>
+			<div class="sub-menu" style="position:fixed;top:50px;left:300px">
+				<a href="/releases">Changelog</a><br />
+				<a href="/bugs" target="_blank">Bugs</a><br />
 			</div>
-			<a href=/download>Download</a>
+			<a href="/download">Download</a>
 			<!--<a href=/faq>FAQ</a>-->
-			<a href=/discord target=_blank>Discord</a>
-			<a href=/yt target=_blank>YouTube</a>
-			<a id="account-link" class="sub-menu" href={ (account ? '/account' : '/login') }>{ account ? 'Logged in as ' + account.username : 'Login'}</a>
-			{account && <div class="sub-menu" style="position:fixed;right:1px;top:50px">
-				<a href="/account">Account</a><br>
-				{account.type > 0 && <><a href="/admin">Admin</a><br></>}
-				<a href="/logout">Log&nbsp;out</a>
-			</div>}
-		</nav><br><br>
-		{center ? <div class="center-content"><slot /></div> : <slot />}
+			<a href="/discord" target="_blank">Discord</a>
+			<a href="/yt" target="_blank">YouTube</a>
+			<a id="account-link" class="sub-menu" href={account ? '/account' : '/login'}>{account ? 'Logged in as ' + account.username : 'Login'}</a>
+			{
+				account && (
+					<div class="sub-menu" style="position:fixed;right:1px;top:50px">
+						<>
+							<a href="/account">Account</a>
+							<br />
+						</>
+						{account.type > 0 && (
+							<>
+								<a href="/admin">Admin</a>
+								<br />
+							</>
+						)}
+						<a href="/logout">Log&nbsp;out</a>
+					</div>
+				)
+			}
+		</nav><br /><br />
+		{
+			center ? (
+				<div class="center-content">
+					<slot />
+				</div>
+			) : (
+				<slot />
+			)
+		}
 	</body>
 </html>

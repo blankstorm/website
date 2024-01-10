@@ -10,7 +10,6 @@ interface Props {
 
 let { account, minType, title = 'Admin' } = Astro.props;
 minType ||= 1; // to prevent 0 from being passed
-
 ---
 
 <Main {title} {account}>

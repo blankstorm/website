@@ -36,13 +36,15 @@ try {
 		{new Date(release.created_at).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
 	</p>
 	<h4>Details</h4>
-	<div class="release-body" set:html={releaseBody}></div>
+	<div class="release-body" set:html={releaseBody} />
 	{
 		release.assets?.length > 0 && (
 			<div>
 				<h4>Downloads</h4>
 				<p>
-					{release.assets?.map((asset: any) => <Asset {asset} />)}
+					{release.assets?.map((asset: any) => (
+						<Asset {asset} />
+					))}
 				</p>
 			</div>
 		)

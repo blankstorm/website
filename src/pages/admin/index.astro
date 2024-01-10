@@ -4,9 +4,9 @@ import { checkAdminAuth } from '../../utils';
 
 const account = await checkAdminAuth(Astro);
 
-if(account instanceof Response) {
+if (account instanceof Response) {
 	return account;
 }
 ---
 
-<Admin {account}></Admin>
+<Admin {account} />

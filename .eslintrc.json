@@ -24,7 +24,5 @@
 		"@typescript-eslint/adjacent-overload-signatures": "warn",
 		"@typescript-eslint/no-inferrable-types": "warn",
 		"@typescript-eslint/no-namespace": "off"
-		
 	}
 }
-

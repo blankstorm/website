@@ -5,7 +5,7 @@ export default defineConfig({
 	output: 'server',
 	adapter: cloudflare({
 		mode: 'directory',
-		runtime: { mode: 'local', type: 'pages' }
+		runtime: { mode: 'local', type: 'pages' },
 	}),
 	site: 'https://blankstorm.net',
 	redirects: {
@@ -17,7 +17,6 @@ export default defineConfig({
 		'/changelog': '/releases',
 		'/bugs': 'https://github.com/blankstorm/blankstorm/issues',
 		'/docs': 'https://github.com/blankstorm/blankstorm/wiki',
-		
 	},
 	markdown: {
 		shikiConfig: {

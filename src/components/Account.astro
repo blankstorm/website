@@ -7,7 +7,7 @@ interface Props {
 }
 
 let { account, viewer } = Astro.props;
-const editable = account === viewer || viewer?.type > Math.max(account.type, 1);
+const editable = account === viewer || viewer?.type > Math.max(account?.type, 1);
 const id = Math.random().toString(36).slice(2);
 ---
 
@@ -22,6 +22,7 @@ const id = Math.random().toString(36).slice(2);
 	class="account"
 	data-account={encodeURIComponent(JSON.stringify(account ? stripAccountInfo(account) : null))}
 	data-viewer={encodeURIComponent(JSON.stringify(viewer ? stripAccountInfo(viewer) : null))}
+	id="account"
 >
 	<style>
 		svg:hover {
@@ -210,7 +211,7 @@ const id = Math.random().toString(36).slice(2);
 	<script>
 		import { deleteAccount, logout, auth, update, type Account } from '@blankstorm/api';
 
-		const account: Account = JSON.parse(decodeURIComponent(document.parentElement?.getAttribute('data-account')));
+		const account: Account = JSON.parse(decodeURIComponent(document.querySelector('#account')?.getAttribute('data-account')));
 
 		const searchParams = new URLSearchParams(location.search);
 

@@ -15,7 +15,7 @@ minType ||= 1; // to prevent 0 from being passed
 <Main {title} {account}>
 	<slot />
 	{
-		account.type < minType ? (
+		account?.type < minType ? (
 			<div>
 				<h2>Forbidden</h2>
 				<p>You do not have permission to access this.</p>
@@ -23,12 +23,12 @@ minType ||= 1; // to prevent 0 from being passed
 		) : (
 			<div>
 				<h3>Actions</h3>
-				{account.type > 2 && (
+				{account?.type > 2 && (
 					<a class="action" href="/admin/account">
 						Manage Account
 					</a>
 				)}
-				{account.type > 1 && (
+				{account?.type > 1 && (
 					<a class="action" href="/admin/releases">
 						Manage Releases
 					</a>

@@ -1,13 +1,13 @@
 ---
 import Main from '../../layouts/Main.astro';
 import AccountView from '../../components/Account.astro';
-import { getAccount, type Account } from '@blankstorm/api';
+import { getAccount, type Account, AccountType, Access } from '@blankstorm/api';
 import { currentUser } from '../../utils';
 
 const viewer = await currentUser(Astro.cookies);
 let account: Account, error: string | Error;
 try {
-	account = Astro.params.id ? await getAccount(Astro.params.id) : viewer;
+	account = Astro.params.id ? await getAccount(Astro.params.id, viewer.type > AccountType.ACCOUNT ? Access.PROTECTED : Access.PUBLIC) : viewer;
 } catch (e) {
 	error = e;
 }

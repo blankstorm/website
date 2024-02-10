@@ -22,7 +22,6 @@ const id = Math.random().toString(36).slice(2);
 	class="account"
 	data-account={encodeURIComponent(JSON.stringify(account ? stripAccountInfo(account) : null))}
 	data-viewer={encodeURIComponent(JSON.stringify(viewer ? stripAccountInfo(viewer) : null))}
-	id={id}
 >
 	<style>
 		svg:hover {
@@ -196,7 +195,7 @@ const id = Math.random().toString(36).slice(2);
 					<button>Change password</button>
 				</a>
 				<button id="logout">Logout</button>
-				<button id="delete"> Delete account</button>
+				<button id="delete">Delete account</button>
 			</>
 		)
 	}
@@ -208,14 +207,10 @@ const id = Math.random().toString(36).slice(2);
 		)
 	}
 	{editable && (account.is_disabled ? viewer.type > account.type && <button id="#enable">Enable</button> : <button id="#disable">Disable</button>)}
-	<script define:vars={{ id }}>
-		globalThis._id = id;
-	</script>
 	<script>
 		import { deleteAccount, logout, auth, update, type Account } from '@blankstorm/api';
 
-		const account: Account = JSON.parse(decodeURIComponent(document.getElementById(_id).getAttribute('data-account'))),
-			viewer = JSON.parse(decodeURIComponent(document.getElementById(_id).getAttribute('data-viewer')));
+		const account: Account = JSON.parse(decodeURIComponent(document.parentElement?.getAttribute('data-account')));
 
 		const searchParams = new URLSearchParams(location.search);
 

@@ -240,7 +240,7 @@ const id = Math.random().toString(36).slice(2);
 		const deleteButton = document.querySelector<HTMLButtonElement>('#delete'),
 			deleteDialog = document.querySelector<HTMLDialogElement>('#delete-dialog');
 		if (deleteButton) {
-			deleteButton.onclick = deleteDialog.showModal;
+			deleteButton.onclick = deleteDialog.showModal.bind(deleteDialog);
 		}
 
 		document.querySelector<HTMLButtonElement>('#delete-dialog .no').onclick = () => {
@@ -256,7 +256,7 @@ const id = Math.random().toString(36).slice(2);
 		const logoutButton = document.querySelector<HTMLButtonElement>('#logout'),
 			logoutDialog = document.querySelector<HTMLDialogElement>('#logout-dialog');
 		if (logoutButton) {
-			logoutButton.onclick = logoutDialog.showModal;
+			logoutButton.onclick = logoutDialog.showModal.bind(logoutDialog);
 		}
 
 		document.querySelector<HTMLButtonElement>('#logout-dialog .no').onclick = () => {

@@ -3,7 +3,7 @@ import Main from '../layouts/Main.astro';
 import { parseBody } from '../utils';
 import { isValidAccountAttribute, login } from '@blankstorm/api';
 
-let err;
+let err: Error;
 if (Astro.request.method == 'POST') {
 	try {
 		const body = await parseBody<{ email: string; password: string }>(Astro.request);

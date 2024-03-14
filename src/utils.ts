@@ -1,7 +1,5 @@
 import type { AstroCookies, AstroGlobal } from 'astro';
-import { type Account, getAccount, auth, config, AccountType } from '@blankstorm/api';
-
-config.throw_errors = false;
+import { type Account, getAccount, auth, AccountType } from '@blankstorm/api';
 
 export async function currentUser(cookies: AstroCookies): Promise<Account | undefined> {
 	if (!cookies.has('token')) {

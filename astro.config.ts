@@ -17,6 +17,7 @@ export default defineConfig({
 		'/changelog': '/releases',
 		'/bugs': 'https://github.com/blankstorm/blankstorm/issues',
 		'/docs': 'https://github.com/blankstorm/blankstorm/wiki',
+		'/.well-known/change-password': '/account?edit=password',
 	},
 	markdown: {
 		shikiConfig: {

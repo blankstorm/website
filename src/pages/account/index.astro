@@ -7,5 +7,5 @@ const account = await currentUser(Astro.cookies);
 ---
 
 <Main title="Account" center {account}>
-	<AccountView {account} />
+	<AccountView {account} viewer={account} />
 </Main>

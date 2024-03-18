@@ -8,6 +8,14 @@
 		"ecmaVersion": "latest",
 		"sourceType": "module"
 	},
+	"overrides": [
+		{
+			"files": "env.d.ts",
+			"rules": {
+				"@typescript-eslint/triple-slash-reference": "off"
+			}
+		}
+	],
 	"plugins": ["@typescript-eslint"],
 	"rules": {
 		"no-useless-escape": "warn",

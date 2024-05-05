@@ -42,3 +42,10 @@ export async function checkAdminAuth(astro: Readonly<AstroGlobal>, minType?: Acc
 
 	return account;
 }
+
+export const formatNum = Intl.NumberFormat('en', { notation: 'compact' }).format;
+export function formatBytes(bytes: number): string {
+	const unit = Math.floor(Math.log10(bytes) / 3);
+	const adjusted = bytes / 10 ** (3 * unit);
+	return adjusted.toFixed(2) + ' ' + ['B', 'KB', 'MB', 'GB', 'TB'][unit];
+}

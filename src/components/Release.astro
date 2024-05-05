@@ -2,6 +2,7 @@
 import { parse as parseMarkdown } from 'marked';
 import type { Release } from '../repository';
 import Asset from './Asset.astro';
+import { formatNum } from '../utils';
 
 interface Props {
 	release: Release;
@@ -40,7 +41,7 @@ try {
 	{
 		release.assets?.length > 0 && (
 			<div>
-				<h4>Downloads</h4>
+				<h4>Downloads ({formatNum(release.assets.reduce((total, { download_count }) => total + download_count, 0))} total)</h4>
 				<p>
 					{release.assets?.map((asset: any) => (
 						<Asset {asset} />

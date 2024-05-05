@@ -1,7 +1,8 @@
 ---
-import Main from '../layouts/Main.astro';
 import Asset from '../components/Asset.astro';
-import { repo_url, repositoryAPIRequest, type Release } from '../repository';
+import Main from '../layouts/Main.astro';
+import { repositoryAPIRequest, type Release } from '../repository';
+import { formatNum } from '../utils';
 
 let error: string | Error, release: Release;
 
@@ -28,7 +29,7 @@ try {
 			</span>
 		) : (
 			<div>
-				<h4>Downloads</h4>
+				<h4>Downloads ({formatNum(release.assets.reduce((total, { download_count }) => total + download_count, 0))} total)</h4>
 				<p>
 					{release.assets?.map((asset: any) => (
 						<Asset {asset} />

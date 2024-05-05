@@ -1,4 +1,6 @@
 ---
+import { formatBytes, formatNum } from '../utils';
+
 interface Asset {
 	name: string;
 	label: string;
@@ -13,13 +15,6 @@ interface Props {
 }
 
 const { asset, include_downloads = true } = Astro.props;
-
-const formatNum = Intl.NumberFormat('en', { notation: 'compact' }).format;
-function formatBytes(bytes: number): string {
-	const unit = Math.floor(Math.log10(bytes) / 3);
-	const adjusted = bytes / 10 ** (3 * unit);
-	return adjusted.toFixed(2) + ' ' + ['B', 'KB', 'MB', 'GB', 'TB'][unit];
-}
 ---
 
 <span>

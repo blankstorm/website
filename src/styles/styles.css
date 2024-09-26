@@ -38,6 +38,7 @@ code {
 	background-color: #222;
 	border: 1px solid #080808;
 	border-radius: 0.5em;
+	padding: 0.25em;
 }
 select {
 	background-color: var(--bg-color-alt);

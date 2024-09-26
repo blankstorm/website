@@ -37,9 +37,9 @@ code {
 	font-family: monospace;
 	background-color: #222;
 	border: 1px solid #080808;
-	border-radius: 0.5em;
-	padding: 0.1em;
-	margin: 0.1em;
+	border-radius: 0.25em;
+	padding: 0.15em;
+	margin: 0.05em;
 }
 select {
 	background-color: var(--bg-color-alt);

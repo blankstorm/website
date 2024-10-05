@@ -1,5 +1,5 @@
 import type { AstroCookies, AstroGlobal } from 'astro';
-import { type Account, getAccount, auth, AccountType } from '@blankstorm/api';
+import { type Account, getAccount, auth, AccountType, Access } from '@blankstorm/api';
 
 export async function currentUser(cookies: AstroCookies): Promise<Account | undefined> {
 	if (!cookies.has('token')) {
@@ -8,7 +8,7 @@ export async function currentUser(cookies: AstroCookies): Promise<Account | unde
 	const token = cookies.get('token')?.value;
 	auth(token);
 	try {
-		return await getAccount('token', token || '');
+		return await getAccount('token', token || '', Access.PROTECTED);
 	} catch (e) {
 		return;
 	}

@@ -191,13 +191,13 @@ const id = Math.random().toString(36).slice(2);
 	{account && <h3>Account Actions</h3>}
 	{
 		account && editable && (
-			<>
+			<span>
 				<a href="?edit=password">
 					<button>Change password</button>
 				</a>
 				<button id="logout">Logout</button>
 				<button id="delete">Delete account</button>
-			</>
+			</span>
 		)
 	}
 	{

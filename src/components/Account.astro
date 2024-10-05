@@ -147,7 +147,7 @@ const id = Math.random().toString(36).slice(2);
 						<td>Type</td>
 						<td>
 							{getAccountRole(account.type)}&nbsp;&nbsp;
-							{editable && viewer && (
+							{editable && viewer?.type > 0 && (
 								<a href="?edit=type">
 									<svg class="icon">
 										<use href="#icon.edit" />

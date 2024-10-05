@@ -1,0 +1,4 @@
+Contact: mailto:security@blankstorm.net
+# Please reach out to @alsovo on discord
+Contact: https://blankstorm.net/discord
+Preferred-Languages: en

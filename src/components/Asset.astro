@@ -18,9 +18,7 @@ const { asset, include_downloads = true } = Astro.props;
 ---
 
 <span>
-	<a href={asset.browser_download_url} download={asset.name}>
-		{asset.label || asset.name}
-	</a>
+	<a href={asset.browser_download_url} download={asset.name}>{asset.label || asset.name}</a>
 	<span>
 		&nbsp;{formatBytes(asset.size)}{include_downloads && ` (${formatNum(asset.download_count)} download${asset.download_count != 1 ? 's' : ''})`}
 	</span>

@@ -4,11 +4,10 @@ import Main from '../layouts/Main.astro';
 import { repositoryAPIRequest, type Release } from '../repository';
 import { formatNum } from '../utils';
 
-let error: string | Error, release: Release;
+let error: string | Error, releases: Release[];
 
 try {
-	const result = await repositoryAPIRequest('/releases');
-	release = result[0];
+	releases = await repositoryAPIRequest('/releases');
 } catch (err) {
 	error = err;
 }
@@ -22,16 +21,17 @@ try {
 				<br />
 				Failed to fetch the latest release.
 			</span>
-		) : release.assets?.length == 0 ? (
+		) : releases[0].assets?.length == 0 ? (
 			<span>
 				<br />
 				The latest release does not have any downloads.
 			</span>
 		) : (
 			<div>
-				<h4>Downloads ({formatNum(release.assets.reduce((total, { download_count }) => total + download_count, 0))} total)</h4>
+				<p>Lifetime downloads: {formatNum(releases.reduce((sum, release) => release.assets.reduce((total, { download_count }) => total + download_count, 0), 0))}</p>
+				<h4>Downloads ({formatNum(releases[0].assets.reduce((total, { download_count }) => total + download_count, 0))} total)</h4>
 				<p>
-					{release.assets?.map((asset: any) => (
+					{releases[0].assets?.map((asset: any) => (
 						<Asset {asset} />
 					))}
 				</p>

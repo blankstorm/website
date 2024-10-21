@@ -1,8 +1,11 @@
 ---
+import { AccountType } from '@blankstorm/api';
 import Asset from '../components/Asset.astro';
 import Main from '../layouts/Main.astro';
 import { repositoryAPIRequest, type Release } from '../repository';
-import { formatNum } from '../utils';
+import { currentUser, formatNum } from '../utils';
+
+const account = await currentUser(Astro.cookies);
 
 let error: string | Error, releases: Release[];
 
@@ -11,9 +14,11 @@ try {
 } catch (err) {
 	error = err;
 }
+
+const include_downloads = account.type != AccountType.ACCOUNT;
 ---
 
-<Main title="Download" center>
+<Main title="Download" center {account}>
 	<br /><br />
 	{
 		error ? (
@@ -28,11 +33,11 @@ try {
 			</span>
 		) : (
 			<div>
-				<p>Lifetime downloads: {formatNum(releases.reduce((sum, release) => sum + release.assets.reduce((total, { download_count }) => total + download_count, 0), 0))}</p>
-				<h4>Downloads ({formatNum(releases[0].assets.reduce((total, { download_count }) => total + download_count, 0))} total)</h4>
+				{include_downloads && <p>Lifetime downloads: {formatNum(releases.reduce((sum, release) => sum + release.assets.reduce((total, { download_count }) => total + download_count, 0), 0))}</p>}
+				<h4>Downloads  {include_downloads && <span>({formatNum(releases[0].assets.reduce((total, { download_count }) => total + download_count, 0))} total)</span>}</h4>
 				<p>
 					{releases[0].assets?.map((asset: any) => (
-						<Asset {asset} />
+						<Asset {asset} {include_downloads} />
 					))}
 				</p>
 			</div>

@@ -6,9 +6,10 @@ import { formatNum } from '../utils';
 
 interface Props {
 	release: Release;
+	include_downloads?: boolean;
 }
 
-const { release } = Astro.props;
+const { release, include_downloads } = Astro.props;
 
 let releaseBody: string;
 try {
@@ -41,10 +42,10 @@ try {
 	{
 		release.assets?.length > 0 && (
 			<div>
-				<h4>Downloads</h4>
+				<h4>Downloads {include_downloads && <span>({formatNum(release.assets.reduce((total, { download_count }) => total + download_count, 0))} total)</span>}</h4>
 				<p>
 					{release.assets?.map((asset: any) => (
-						<Asset {asset} />
+						<Asset {asset} {include_downloads} />
 					))}
 				</p>
 			</div>

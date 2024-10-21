@@ -41,7 +41,7 @@ try {
 	{
 		release.assets?.length > 0 && (
 			<div>
-				<h4>Downloads ({formatNum(release.assets.reduce((total, { download_count }) => total + download_count, 0))} total)</h4>
+				<h4>Downloads</h4>
 				<p>
 					{release.assets?.map((asset: any) => (
 						<Asset {asset} />

@@ -15,7 +15,7 @@ try {
 	error = err;
 }
 
-const include_downloads = account.type != AccountType.ACCOUNT;
+const include_downloads = !!account?.type;
 ---
 
 <Main title="Download" center {account}>

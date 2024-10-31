@@ -2,6 +2,7 @@
 import ReleaseView from '../../components/Release.astro';
 import Main from '../../layouts/Main.astro';
 import { repositoryAPIRequest, type Release } from '../../repository';
+import { currentUser } from '../../utils';
 
 let error: string | Error, release: Release;
 
@@ -9,15 +10,20 @@ const { version } = Astro.params;
 
 const fetch_url = '/releases' + (version == 'latest' ? '' : '/tags/' + version);
 
+
 try {
 	const result = await repositoryAPIRequest(fetch_url);
 	release = version == 'latest' ? result[0] : result;
 } catch (err) {
 	error = err;
 }
+
+const account = await currentUser(Astro.cookies);
+
+const include_downloads = !!account?.type;
 ---
 
-<Main title={`Release ${release?.name || ''}`}>
+<Main title={`Release ${release?.name || ''}`} {account}>
 	{
 		error ? (
 			<span data-fetch-url={fetch_url}>
@@ -25,7 +31,7 @@ try {
 				Failed to fetch release{typeof error == 'string' && ': ' + error}
 			</span>
 		) : (
-			<ReleaseView {release} />
+			<ReleaseView {release} {include_downloads} />
 		)
 	}
 </Main>

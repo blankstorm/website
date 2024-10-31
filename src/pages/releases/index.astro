@@ -2,6 +2,7 @@
 import ReleaseView from '../../components/Release.astro';
 import Main from '../../layouts/Main.astro';
 import { repo_url, repositoryAPIRequest, type Release } from '../../repository';
+import { currentUser } from '../../utils';
 
 let error: string | Error | undefined,
 	releases: Release[] = [];
@@ -12,6 +13,11 @@ try {
 } catch (err) {
 	error = err;
 }
+
+
+const account = await currentUser(Astro.cookies);
+
+const include_downloads = !!account?.type;
 ---
 
 <Main title="Releases">
@@ -26,7 +32,7 @@ try {
 				.
 			</span>
 		) : (
-			releases.map((release: Release) => <ReleaseView {release} />)
+			releases.map((release: Release) => <ReleaseView {release} {include_downloads} />)
 		)
 	}
 </Main>

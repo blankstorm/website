@@ -10,7 +10,6 @@ const { version } = Astro.params;
 
 const fetch_url = '/releases' + (version == 'latest' ? '' : '/tags/' + version);
 
-
 try {
 	const result = await repositoryAPIRequest(fetch_url);
 	release = version == 'latest' ? result[0] : result;
